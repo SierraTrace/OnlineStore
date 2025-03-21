@@ -4,18 +4,20 @@ package modelo;
 
 
 import modelo.Cliente.Cliente;
+import modelo.Cliente.ClientePremium;
 import modelo.enums.TipoEstado;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Pedido {
+public class  Pedido {
 
     private Integer numeroPedido;
     private Articulo articulo;
     private Integer cantidadArticulos;
     private Cliente cliente;
-    private Float precioTotal;
+    private double precioTotal;
     private LocalDateTime fechaPedido;
     private TipoEstado estado;
 
@@ -29,13 +31,31 @@ public class Pedido {
         this.estado = TipoEstado.PENDIENTE;
     }
 
-    private float calcularTotal() {
-        // TODO Desarrollar cálculo del precio total
-        return 0; // TODO Controlar retorno
+    private double calcularTotal() {
+        // TODO Pendiente implementar test unitario
+        // Calcular gastos de envío
+        double gastosEnvio;
+        if (cliente instanceof ClientePremium clientePremium) {
+            gastosEnvio = articulo.getGastosEnvio() * (clientePremium.getDescuento() / 100.0);
+        } else {
+            gastosEnvio = articulo.getGastosEnvio();
+        }
+
+        // Calcular total
+        return gastosEnvio + (articulo.getPrecioVenta() * cantidadArticulos);
     }
 
     public void actualizarEstadoPreparacion() {
-        // TODO Desarrollar método que verifique el "tiempoPreparación" vs "fechaPedido" y actualice "estado"
+        // TODO Pendiente implementar test unitario
+        if (estado == TipoEstado.PENDIENTE) {
+            // Calcular el tiempo transcurrido
+            long tiempoTranscurrido = Duration.between(fechaPedido, LocalDateTime.now()).toMinutes();
+
+            // Actualizar estado se ha cumplido el tiempo de preparación
+            if (tiempoTranscurrido >= articulo.getTiempoPreparacion()) {
+                estado = TipoEstado.ENVIADO;
+            }
+        }
     }
 
     private TipoEstado getEstado() {
@@ -65,7 +85,7 @@ public class Pedido {
     private void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
-    public Float getPrecioTotal() {
+    public double getPrecioTotal() {
         return precioTotal;
     }
     public LocalDateTime getFechaPedido() {
