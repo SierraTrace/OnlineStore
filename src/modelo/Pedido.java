@@ -61,33 +61,43 @@ public class  Pedido {
     private TipoEstado getEstado() {
         return estado;
     }
+
     private void setEstado(TipoEstado estado) {
         this.estado = estado;
     }
+
     public Integer getNumeroPedido() {
         return numeroPedido;
     }
+
     public Articulo getArticulo() {
         return articulo;
     }
+
     private void setArticulo(Articulo articulo) {
         this.articulo = articulo;
     }
+
     public Integer getCantidadArticulos() {
         return cantidadArticulos;
     }
+
     private void setCantidadArticulos(Integer cantidadArticulos) {
         this.cantidadArticulos = cantidadArticulos;
     }
+
     public Cliente getCliente() {
         return cliente;
     }
+
     private void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+
     public double getPrecioTotal() {
         return precioTotal;
     }
+
     public LocalDateTime getFechaPedido() {
         return fechaPedido;
     }
