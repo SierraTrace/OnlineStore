@@ -4,12 +4,16 @@ import java.util.Scanner;
 import controlador.Controlador;
 import java.util.List;
 
+import java.util.Scanner;
+
 public class Vista {
 
     Scanner scanner;
     Controlador controlador;
     PrintStream streamSalida;
 
+
+    // Constructor
     public Vista() {
         this.scanner= new Scanner(System.in);
         this.streamSalida= System.out;
@@ -124,6 +128,7 @@ public class Vista {
             tiempoPreparacion = scanner.nextInt();
 
             controlador.addArticle(codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion);
+
     }
 
     //GESTIÓN DE CLIENTES
