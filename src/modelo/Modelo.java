@@ -2,10 +2,6 @@ package modelo;
 
 // Grupo 2 - SQL SQUAD
 
-// En el diagrama de clases se han representado las funcionalidades que tendrá la tienda online sobre la clase tienda
-// En esta clase de momento solo hemos desarrollado getters, setters y toString entendiendo que el desarrollo de
-// las funcionalidades de la tienda se realizará en el Producto 2
-
 
 import modelo.Cliente.Cliente;
 
@@ -51,15 +47,30 @@ public class Modelo {
     }
 
     public Cliente getPedido(Integer numeroPedido) {
-        return Null;
-    } //TODO
+        for (Pedido pedido : pedidos) {
+            if (pedido.getNumeroPedido().equals(numeroPedido)) {
+                return pedido.getCliente();
+            }
+        }
+        return null;
+    }
 
-    public Cliente getArticulo(String codigoArticulo) {
+    public Articulo getArticulo(String codigoArticulo) {
+        for (Articulo articulo : articulos) {
+            if (articulo.getCodigoArticulo().equals(codigoArticulo)) {
+                return articulo;
+            }
+        }
         return Null;
-    } //TODO
+    }
 
     //Getters de listados
-    public ArrayList<Cliente> getListaClientes() {return Null;} //TODO
+    public HashMap<String, Cliente> getListaClientes() {
+        if (clientes == null) {
+            throw new IllegalStateException("Mapa de clientes no inicializado");
+        }
+        return new HashMap<String, Cliente>(clientes);
+    }
 
     public ArrayList<Articulo> getArticulos() {
         return articulos;
