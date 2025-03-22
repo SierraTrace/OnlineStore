@@ -1,0 +1,13 @@
+# Ignorar archivos binarios y carpetas de compilación
+*.class
+*.jar
+out/
+target/
+
+# Ignorar archivos de configuración de IDEs
+.idea/
+.vscode/
+
+# Ignorar archivos de logs
+*.log
+
