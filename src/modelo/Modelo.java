@@ -65,7 +65,11 @@ public class Modelo {
     }
 
     public boolean findItem(String codigoArticulo) {
-        //TODO - IMPLEMENTAR BÚSQUEDA POR CÓDIGO
+        for (Articulo articulo : articulos) {
+            if (articulo.getCodigoArticulo().equals(codigoArticulo)) {
+                return true;
+            }
+        }
         return false;
     }
 }

@@ -41,6 +41,7 @@ public class Controlador {
     public boolean findItem (String codigoArticulo) {
         return (modeloTienda.findItem(codigoArticulo));
     }
+
     private <E> List<E> getListaArticulos() {
         return ((List<E>)modeloTienda.getArticulos());
     }
@@ -64,6 +65,7 @@ public class Controlador {
     //Permite añadir un cliente al modelo.
     public void addClient(){
         //TODO
+
     }
 
     //Métodos que pasan información a la vista.
