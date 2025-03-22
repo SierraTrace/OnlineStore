@@ -33,6 +33,7 @@ public class Controlador {
     public void addArticle(String codigoArticulo, String descripcion,
                            Float precioVenta, Float gastosEnvio,
                            Integer tiempoPreparacion){
+
         Articulo articulo = new Articulo(codigoArticulo, descripcion, precioVenta,gastosEnvio,tiempoPreparacion);
         modeloTienda.addArticulo(articulo);
     }
@@ -41,6 +42,7 @@ public class Controlador {
     public boolean findItem (String codigoArticulo) {
         return (modeloTienda.findItem(codigoArticulo));
     }
+
     private <E> List<E> getListaArticulos() {
         return ((List<E>)modeloTienda.getArticulos());
     }
@@ -64,6 +66,7 @@ public class Controlador {
     //Permite añadir un cliente al modelo.
     public void addClient(){
         //TODO
+
     }
 
     //Métodos que pasan información a la vista.
