@@ -47,14 +47,15 @@ public class Controlador {
     ////////Métodos que actualizan la vista.////////
 
     //Imprime por el stream de salida la lista.
-    public <E> void mostrarArticulos(PrintStream streamSalida) {
+    public <E> void mostrarArticulos() {
         //PIde la lista generica al controlador.
         List<E> listaArticulos = this.getListaArticulos();
-
+        StringBuilder sb = new StringBuilder();
         //Recorre la lista e imprime sus elementos
         for (E articulo : listaArticulos) {
-            streamSalida.println(articulo.toString() + "\n");
+            sb.append(articulo.toString() + "\n");
         }
+        vistaTienda.updateView(sb.toString());
     }
 
 
@@ -81,6 +82,10 @@ public class Controlador {
         return ((List<E>) modeloTienda.getListaClientes());
 
     }
+    public boolean findCliente(String emailCliente) {
+        if(modeloTienda.getCliente(emailCliente)!= null) return true;
+        return false;
+    }
 
     //Comprueba que se trata de un objeto cliente premium
     private <E> boolean isPremium(E cliente){
@@ -95,34 +100,41 @@ public class Controlador {
 
     //Métodos que actualizan la vista.
 
-    public <E> void mostrarClientes(PrintStream streamSalida) {
+    public <E> void mostrarClientes() {
         List<E> listaClientes = getListaClientes();
-        streamSalida.println("Lista de clientes: \n");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Lista de clientes: \n");
         for (E cliente : listaClientes) {
-            streamSalida.println(cliente.toString() + "\n");
+            sb.append(cliente.toString() + "\n");
         }
+        //Envía la cadena a la vista y hace update
+        vistaTienda.updateView(sb.toString());
     }
 
-    public <E> void mostrarClientesPremium(PrintStream streamSalida) {
+    public <E> void mostrarClientesPremium() {
         List<E> listaClientes = getListaClientes();
-        streamSalida.println("Lista de clientes Premium: \n");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Lista de clientes Premium: \n");
         for (E cliente : listaClientes) {
-            if (isPremium(cliente)){
-                streamSalida.println(cliente.toString() + "\n");
+            if (isPremium(cliente)) {
+                sb.append(cliente.toString() + "\n");
             }
-
         }
+        //Envía la cadena a la vista y hace update
+        vistaTienda.updateView(sb.toString());
     }
 
-    public <E> void mostrarClientesEstandar(PrintStream streamSalida) {
+    public <E> void mostrarClientesEstandar() {
         List<E> listaClientes = getListaClientes();
-        streamSalida.println("Lista de clientes Estandar: \n");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Lista de clientes Estandar: \n");
         for (E cliente : listaClientes) {
-            if (isEstandar(cliente)){
-                streamSalida.println(cliente.toString() + "\n");
+            if (isEstandar(cliente)) {
+                sb.append(cliente.toString() + "\n");
             }
-
         }
+        //Envía la cadena a la vista y hace update
+        vistaTienda.updateView(sb.toString());
     }
 
 
@@ -130,14 +142,24 @@ public class Controlador {
 
     ///////////////////////Gestión de Pedidos//////////////////////////
     /// Permite añadir un pedido al modelo.
-    public void addPedido(Integer numeroPedido, Articulo articulo, Integer cantidadArticulos, Cliente cliente) {
+    public void addPedido(String codigoArticulo, Integer cantidadArticulos, String emailCliente) {
+        Integer numeroPedido = modeloTienda.generarProximoPedido();
+        Articulo articulo = modeloTienda.getArticulo(codigoArticulo);
+        Cliente cliente = modeloTienda.getCliente(emailCliente);
         Pedido pedido = new Pedido(numeroPedido, articulo, cantidadArticulos, cliente);
         modeloTienda.addPedido(pedido);
+        vistaTienda.updateView("Pedido añadido con el número: "+ numeroPedido);
     }
 
     //Permite eliminar un pedido del modelo.
-    public void removePedido() {
-        //TODO
+    //. Un pedido puede ser borrado únicamente si no ha sido enviado, es decir, si el tiempo transcurrido a desde
+    // la fecha y hora del pedido no supera el tiempo de preparación para el envío del artículo.
+    public void removePedido(Integer numeroPedido) {
+        if(esBorrable(numeroPedido)){
+            modeloTienda.borrarPedido(numeroPedido); //FALTA EN MODELO
+        } else {
+            vistaTienda.updateView("No es posible borrar el pedido");
+        }
     }
 
 
@@ -162,6 +184,9 @@ public class Controlador {
     public void mostrarPedidosEnviados(String iDcliente) {
         //TODO
     }
+
+
+
 
 }
 
