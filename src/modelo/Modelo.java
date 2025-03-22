@@ -48,16 +48,21 @@ public class Modelo {
 
     public Cliente getPedido(Integer numeroPedido) {
         for (Pedido pedido : pedidos) {
-            if (pedido.getNumeroPedido() == numeroPedido) {
+            if (pedido.getNumeroPedido().equals(numeroPedido)) {
                 return pedido.getCliente();
             }
         }
         return null;
     }
 
-    public Cliente getArticulo(String codigoArticulo) {
+    public Articulo getArticulo(String codigoArticulo) {
+        for (Articulo articulo : articulos) {
+            if (articulo.getCodigoArticulo().equals(codigoArticulo)) {
+                return articulo;
+            }
+        }
         return Null;
-    } //TODO
+    }
 
     //Getters de listados
     public HashMap getListaClientes() {
