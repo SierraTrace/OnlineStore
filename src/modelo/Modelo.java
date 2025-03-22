@@ -73,6 +73,9 @@ public class Modelo {
     }
 
     public ArrayList<Articulo> getArticulos() {
+        if (articulos == null) {
+            throw new IllegalStateException("Lista de articulos no inicializada");
+        }
         return articulos;
     }
 
