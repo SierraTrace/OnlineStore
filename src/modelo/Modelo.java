@@ -65,9 +65,12 @@ public class Modelo {
     }
 
     //Getters de listados
-    public HashMap getListaClientes() {
-        return Null;
-    } //TODO
+    public HashMap<String, Cliente> getListaClientes() {
+        if (clientes == null) {
+            throw new IllegalStateException("Mapa de clientes no inicializado");
+        }
+        return new HashMap<String, Cliente>(clientes);
+    }
 
     public ArrayList<Articulo> getArticulos() {
         return articulos;
