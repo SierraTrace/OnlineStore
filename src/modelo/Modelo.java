@@ -95,4 +95,26 @@ public class Modelo {
         }
         return false;
     }
+
+    public void actualizarPedidos() {
+        if (pedidos == null) {
+            throw new IllegalStateException("Lista de pedidos no inicializada");
+        }
+        for (Pedido pedido : pedidos) {
+            pedido.actualizarEstadoPreparacion();
+        }
+    }
+
+    public boolean actualizarPedido(Integer numeroPedido) {
+        if (pedidos == null) {
+            throw new IllegalStateException("Lista de pedidos no inicializada");
+        }
+        for (Pedido pedido : pedidos) {
+            if (pedido.getNumeroPedido().equals(numeroPedido)) {
+                pedido.actualizarEstadoPreparacion();
+                return true;
+            }
+        }
+        return false;
+    }
 }
