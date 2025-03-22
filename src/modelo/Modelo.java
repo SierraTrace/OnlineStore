@@ -61,7 +61,7 @@ public class Modelo {
                 return articulo;
             }
         }
-        return Null;
+        return null;
     }
 
     //Getters de listados
