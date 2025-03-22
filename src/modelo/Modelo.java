@@ -17,18 +17,14 @@ public class Modelo {
 
     private HashMap<String, Cliente> clientes;
     private ArrayList<Articulo> articulos;
-    private ArrayList<Pedido> articuloList;
+    private ArrayList<Pedido> pedidos;
     private Integer proximoPedido;
 
-    // TODO Pendiente decidir
-    // Nos parece interesante implementar la lista de clientes con HashMap por su facilidad para poder recuperar
-    // un cliente por su email de forma directa pero está pendiente de decidir de no ser así se implementará
-    // como ArrayList<Cliente>
 
     public Modelo() {
         clientes = new HashMap<>();
         articulos = new ArrayList<>();
-        articuloList = new ArrayList<>();
+        pedidos = new ArrayList<>();
         proximoPedido = 0;
     }
 
@@ -36,31 +32,53 @@ public class Modelo {
         return ++proximoPedido;
     }
 
+    //Añaden a listados
     public void addArticulo(Articulo articulo) {
         articulos.add(articulo);
     }
 
     public void addPedido(Pedido pedido) {
-        articuloList.add(pedido);
+        pedidos.add(pedido);
     }
 
     public void addCliente(Cliente cliente) {
         clientes.put(cliente.getEmail(), cliente);
     }
 
+    //Getters individuales
     public Cliente getCliente(String email) {
         return clientes.get(email);
     }
+
+    public Cliente getPedido(Integer numeroPedido) {
+        return Null;
+    } //TODO
+
+    public Cliente getArticulo(String codigoArticulo) {
+        return Null;
+    } //TODO
+
+    //Getters de listados
+    public ArrayList<Cliente> getListaClientes() {return Null;} //TODO
 
     public ArrayList<Articulo> getArticulos() {
         return articulos;
     }
 
-    public ArrayList<Pedido> getArticuloList() {
-        return articuloList;
+    public ArrayList<Pedido> getPedidos() {
+        return pedidos;
     }
 
     public String toString() {
         return "Tienda OnLineStore de SQL Squad";
+    }
+
+    public boolean findItem(String codigoArticulo) {
+        for (Articulo articulo : articulos) {
+            if (articulo.getCodigoArticulo().equals(codigoArticulo)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
