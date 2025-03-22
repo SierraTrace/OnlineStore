@@ -78,8 +78,9 @@ public class Vista {
         } while (opcion != 0);
     }
 
-    // T es el tipo genérico de la lista, los objetos de la lista deben tener método toString().
+    // T es el tipo genérico de la lista, los objetos de la lista deben tener metodo toString().
     private <E> void mostrarArticulos() {
+        // TODO verificar
         //PIde la lista generica al controlador.
         //List<E> listaArticulos = controlador.getListaArticulos();
 

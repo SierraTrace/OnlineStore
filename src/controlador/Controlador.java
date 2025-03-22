@@ -30,6 +30,7 @@ public class Controlador {
                            Float precioVenta, Float gastosEnvio,
                            Integer tiempoPreparacion) {
         Articulo articulo = new Articulo(codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion);
+
         modeloTienda.addArticulo(articulo);
     }
 
@@ -64,6 +65,7 @@ public class Controlador {
         modeloTienda.addCliente(cliente);
     }
 
+
     //Métodos que toman info del modelo
 
     /**
@@ -77,6 +79,7 @@ public class Controlador {
     }
     private <E> List<E> getListaClientes() {
         return ((List<E>) modeloTienda.getListaClientes());
+
     }
 
     //Comprueba que se trata de un objeto cliente premium
