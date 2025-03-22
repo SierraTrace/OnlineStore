@@ -20,10 +20,6 @@ public class Modelo {
     private ArrayList<Pedido> pedidos;
     private Integer proximoPedido;
 
-    // TODO Pendiente decidir
-    // Nos parece interesante implementar la lista de clientes con HashMap por su facilidad para poder recuperar
-    // un cliente por su email de forma directa pero está pendiente de decidir de no ser así se implementará
-    // como ArrayList<Cliente>
 
     public Modelo() {
         clientes = new HashMap<>();

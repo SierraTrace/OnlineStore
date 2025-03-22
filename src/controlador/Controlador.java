@@ -33,6 +33,7 @@ public class Controlador {
     public void addArticle(String codigoArticulo, String descripcion,
                            Float precioVenta, Float gastosEnvio,
                            Integer tiempoPreparacion){
+
         Articulo articulo = new Articulo(codigoArticulo, descripcion, precioVenta,gastosEnvio,tiempoPreparacion);
         modeloTienda.addArticulo(articulo);
     }
