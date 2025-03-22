@@ -32,6 +32,7 @@ public class Modelo {
         return ++proximoPedido;
     }
 
+    //Añaden a listados
     public void addArticulo(Articulo articulo) {
         articulos.add(articulo);
     }
@@ -44,9 +45,21 @@ public class Modelo {
         clientes.put(cliente.getEmail(), cliente);
     }
 
+    //Getters individuales
     public Cliente getCliente(String email) {
         return clientes.get(email);
     }
+
+    public Cliente getPedido(Integer numeroPedido) {
+        return Null;
+    } //TODO
+
+    public Cliente getArticulo(String codigoArticulo) {
+        return Null;
+    } //TODO
+
+    //Getters de listados
+    public ArrayList<Cliente> getListaClientes() {return Null;} //TODO
 
     public ArrayList<Articulo> getArticulos() {
         return articulos;
