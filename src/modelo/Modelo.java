@@ -17,7 +17,7 @@ public class Modelo {
 
     private HashMap<String, Cliente> clientes;
     private ArrayList<Articulo> articulos;
-    private ArrayList<Pedido> articuloList;
+    private ArrayList<Pedido> pedidos;
     private Integer proximoPedido;
 
     // TODO Pendiente decidir
@@ -28,7 +28,7 @@ public class Modelo {
     public Modelo() {
         clientes = new HashMap<>();
         articulos = new ArrayList<>();
-        articuloList = new ArrayList<>();
+        pedidos = new ArrayList<>();
         proximoPedido = 0;
     }
 
@@ -41,7 +41,7 @@ public class Modelo {
     }
 
     public void addPedido(Pedido pedido) {
-        articuloList.add(pedido);
+        pedidos.add(pedido);
     }
 
     public void addCliente(Cliente cliente) {
@@ -56,11 +56,16 @@ public class Modelo {
         return articulos;
     }
 
-    public ArrayList<Pedido> getArticuloList() {
-        return articuloList;
+    public ArrayList<Pedido> getPedidos() {
+        return pedidos;
     }
 
     public String toString() {
         return "Tienda OnLineStore de SQL Squad";
+    }
+
+    public boolean findItem(String codigoArticulo) {
+        //TODO - IMPLEMENTAR BÚSQUEDA POR CÓDIGO
+        return false;
     }
 }
