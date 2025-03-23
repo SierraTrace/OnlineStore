@@ -2,9 +2,6 @@ package vista;
 import java.io.PrintStream;
 import java.util.Scanner;
 import controlador.Controlador;
-import java.util.List;
-
-import java.util.Scanner;
 
 public class Vista {
 
@@ -13,7 +10,7 @@ public class Vista {
     PrintStream streamSalida;
 
 
-    // Constructor
+    //Constructor
     public Vista() {
         this.scanner= new Scanner(System.in);
         this.streamSalida= System.out;
@@ -23,6 +20,11 @@ public class Vista {
     public void startVista(Controlador controlador) {
         this.controlador = controlador;
         menuPrincipal();
+    }
+
+    //Método genérico para mostrar por consola
+    public void updateView(String string){
+        System.out.println(string);
     }
 
     //Muestra el nivel más alto de jerarquía del menú y controla el bucle.
@@ -41,10 +43,10 @@ public class Vista {
                     menuGestionArticulos();
                     break;
                 case 2:
-                    gestionarClientes(scanner);
+                    menuGestionClientes();
                     break;
                 case 3:
-                    gestionarPedidos(scanner);
+                    gestionarPedidos();
                     break;
                 case 0:
                     System.out.println("Saliendo del programa...");
@@ -57,6 +59,7 @@ public class Vista {
 
 
     //GESTION DE ARTICULOS
+    //Menú de opciónes para la gestión de artículos
     private void menuGestionArticulos() {
         int opcion;
         do {
@@ -81,8 +84,8 @@ public class Vista {
             }
         } while (opcion != 0);
     }
-
-    // T es el tipo genérico de la lista, los objetos de la lista deben tener metodo toString().
+    // E es el tipo genérico de la lista, los objetos de la lista deben tener metodo toString().
+    //Pide al controlador actualizar la vista con la lista de artículos
     private <E> void mostrarArticulos() {
         // TODO verificar
         //PIde la lista generica al controlador.
@@ -92,47 +95,41 @@ public class Vista {
         //for (E articulo : listaArticulos) {
         //    System.out.println(articulo.toString()+"\n");
         //}
-        controlador.mostrarArticulos(streamSalida);
+        controlador.mostrarArticulos();
     }
-
+    //Inicia el proceso de alta de nuevo artículo
     private void anyadirArticulo() {
         String codigoArticulo;
         scanner.nextLine(); //LIMPIA BUFFER
         System.out.print("Introduzca el código del articulo:");
         codigoArticulo = scanner.nextLine();
-        if (esArticuloNuevo(codigoArticulo)) {
-            crearArticulo(codigoArticulo);
-        }
+        controlador.esArticuloNuevo(codigoArticulo);
     }
-    private boolean esArticuloNuevo(String codigoArticulo){
-        //Pide al controlador que compruebe si el árticulo ya existe
-        return (!controlador.findItem(codigoArticulo));
-    }
-    private void crearArticulo(String codigoArticulo){
+    //Pide el resto de datos al usuario
+    public void pedirDatosArticulo(String codigoArticulo){
             String descripcion;
             Float precioVenta;
             Float gastosEnvio;
             Integer tiempoPreparacion;
 
-            //Pedir todos los datos y actualizar las variables TODO
-            System.out.print("S: ");
+            //TODO Pedir todos los datos y actualizar las variables
+            System.out.print("Introduzca la descripcion del articulo: ");
             descripcion = scanner.nextLine();
 
-            System.out.print("S: ");
+            System.out.print("Introduzca el precio de venta: ");
             precioVenta = scanner.nextFloat();
 
-            System.out.print("S: ");
+            System.out.print("Introduzca los gastos de envio: ");
             gastosEnvio = scanner.nextFloat();
 
-            System.out.print("S: ");
+            System.out.print("Introduzca el tiempo de preparacion: ");
             tiempoPreparacion = scanner.nextInt();
-
             controlador.addArticle(codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion);
-
     }
 
+
     //GESTIÓN DE CLIENTES
-    private void gestionarClientes(Scanner scanner) {
+    private void menuGestionClientes() {
     int opcion;
     do {
         System.out.println("\nGestión de Clientes");
@@ -144,10 +141,10 @@ public class Vista {
 
         switch (opcion) {
             case 1:
-                System.out.println("Añadir Clientes aún no implementado.");
+                anyadirCliente();
                 break;
             case 2:
-                System.out.println("Mostrar Clientes aún no implementado.");
+                menuMostrarClientes();
                 break;
             case 0:
                 break;
@@ -156,9 +153,66 @@ public class Vista {
         }
     } while (opcion != 0);
 }
+    private void anyadirCliente() {
+        String emailCliente;
+        scanner.nextLine(); //LIMPIA BUFFER
+        System.out.print("Introduzca el e-mail del cliente:");
+        emailCliente = scanner.nextLine();
+        controlador.esClienteNuevo(emailCliente);
+    }
+    public void pedirDatosCliente(String emailCliente){
+        String nombre;
+        String domicilio;
+        String nif;
+        Integer tipoCliente; //(1)Premium (2) Estandar
+
+        //TODO Pedir todos los datos y actualizar las variables
+        System.out.print("Introduzca el nombre del cliente: ");
+        nombre = scanner.nextLine();
+
+        System.out.print("Indroduzca el domicilio del cliente: ");
+        domicilio = scanner.nextLine();
+
+        System.out.print("Introduzca el nif del cliente: ");
+        nif = scanner.nextLine();
+
+        System.out.print("Elija el tipo de cliente: (1)Premium (2) Estandar :");
+        tipoCliente = scanner.nextInt();
+
+        controlador.addCliente(nombre, domicilio, nif, emailCliente, tipoCliente);
+
+    }
+    private void menuMostrarClientes(){
+        int opcion;
+        do {
+            System.out.println("\nGestión de Clientes > Mostrar Clientes");
+            System.out.println("1. Mostrar todos los clientes");
+            System.out.println("2. Mostrar clientes Estandar");
+            System.out.println("3. Mostrar clientes Premium");
+            System.out.println("0. Volver");
+            System.out.print("Seleccione una opción: ");
+            opcion = scanner.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    controlador.mostrarClientes();
+                    break;
+                case 2:
+                    controlador.mostrarClientesEstandar();
+                    break;
+                case 3:
+                    controlador.mostrarClientesPremium();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Opción no válida. Intente de nuevo.");
+            }
+        } while (opcion != 0);
+    }
 
     //GESTIÓN DE PEDIDOS
-    private void gestionarPedidos(Scanner scanner) {
+    private void gestionarPedidos() {
     int opcion;
     do {
         System.out.println("\nGestión de Pedidos");
@@ -190,5 +244,30 @@ public class Vista {
         }
     } while (opcion != 0);
 }
+    private void anyadirPedido(){
+        String codigoArticulo;
+        Integer cantidad;
+        String emailCliente;
 
+        System.out.print("Introduzca el código del artículo:");
+        codigoArticulo = scanner.nextLine();
+        System.out.print("Introduzca la cantidad:");
+        cantidad = scanner.nextInt();
+        scanner.nextLine();//LIMPIA BUFFER
+        System.out.print("Introduzca el e-mail del cliente:");
+        emailCliente = scanner.nextLine();
+        controlador.addPedido(codigoArticulo, cantidad, emailCliente);
+    }
+    private void eliminarPedido(){
+        System.out.print("Introduzca el número del pedido:");
+        Integer numeroPedido = scanner.nextInt();
+        scanner.nextLine();
+        controlador.removePedido(numeroPedido);
+    }
+    private void mostrarPedidosPendientes(){
+        //TODO
+    }
+    private void mostrarPedidosEnviados(){
+        //TODO
+    }
 }
