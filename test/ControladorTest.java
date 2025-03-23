@@ -4,10 +4,7 @@ import modelo.Cliente.Cliente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import vista.Vista;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ControladorTest {
@@ -25,14 +22,14 @@ class ControladorTest {
 
     @Test
     void testAddArticle() {
-        controlador.addArticle("A001", "Articulo Test", 100.0f, 5.0f, 2);
-        assertTrue(modelo.findItem("A001"));
+        controlador.addArticulo("A001", "Articulo Test", 100.0f, 5.0f, 2);
+        assertTrue(modelo.existeArticulo("A001"));
     }
 
     @Test
     void testFindItem() {
         modelo.addArticulo(new Articulo("A002", "Articulo de prueba", 50.0f, 2.0f, 1));
-        assertTrue(controlador.findItem("A002"));
+        assertTrue(controlador.existeArticulo("A002"));
     }
 
     @Test

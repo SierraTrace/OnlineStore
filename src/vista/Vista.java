@@ -4,29 +4,23 @@ import java.util.Scanner;
 import controlador.Controlador;
 
 public class Vista {
-
     Scanner scanner;
     Controlador controlador;
     PrintStream streamSalida;
-
-
     //Constructor
     public Vista() {
         this.scanner= new Scanner(System.in);
         this.streamSalida= System.out;
     }
-
     //Actualiza el controlador y comienza el menú principal
     public void startVista(Controlador controlador) {
         this.controlador = controlador;
         menuPrincipal();
     }
-
     //Método genérico para mostrar por consola
     public void updateView(String string){
         System.out.println(string);
     }
-
     //Muestra el nivel más alto de jerarquía del menú y controla el bucle.
     private void menuPrincipal(){
         int opcion;
@@ -46,7 +40,7 @@ public class Vista {
                     menuGestionClientes();
                     break;
                 case 3:
-                    gestionarPedidos();
+                    menuGestionPedidos();
                     break;
                 case 0:
                     System.out.println("Saliendo del programa...");
@@ -56,7 +50,6 @@ public class Vista {
             }
         } while (opcion != 0);
     }
-
 
     //GESTION DE ARTICULOS
     //Menú de opciónes para la gestión de artículos
@@ -86,15 +79,7 @@ public class Vista {
     }
     // E es el tipo genérico de la lista, los objetos de la lista deben tener metodo toString().
     //Pide al controlador actualizar la vista con la lista de artículos
-    private <E> void mostrarArticulos() {
-        // TODO verificar
-        //PIde la lista generica al controlador.
-        //List<E> listaArticulos = controlador.getListaArticulos();
-
-        //Recorre la lista e imprime sus elementos
-        //for (E articulo : listaArticulos) {
-        //    System.out.println(articulo.toString()+"\n");
-        //}
+    private void mostrarArticulos() {
         controlador.mostrarArticulos();
     }
     //Inicia el proceso de alta de nuevo artículo
@@ -103,14 +88,14 @@ public class Vista {
         scanner.nextLine(); //LIMPIA BUFFER
         System.out.print("Introduzca el código del articulo:");
         codigoArticulo = scanner.nextLine();
-        controlador.esArticuloNuevo(codigoArticulo);
+        controlador.nuevoCodigoArticulo(codigoArticulo);
     }
     //Pide el resto de datos al usuario
     public void pedirDatosArticulo(String codigoArticulo){
             String descripcion;
-            Float precioVenta;
-            Float gastosEnvio;
-            Integer tiempoPreparacion;
+            float precioVenta;
+            float gastosEnvio;
+            int tiempoPreparacion;
 
             //TODO Pedir todos los datos y actualizar las variables
             System.out.print("Introduzca la descripcion del articulo: ");
@@ -124,7 +109,7 @@ public class Vista {
 
             System.out.print("Introduzca el tiempo de preparacion: ");
             tiempoPreparacion = scanner.nextInt();
-            controlador.addArticle(codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion);
+            controlador.addArticulo(codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion);
     }
 
 
@@ -164,7 +149,7 @@ public class Vista {
         String nombre;
         String domicilio;
         String nif;
-        Integer tipoCliente; //(1)Premium (2) Estandar
+        int tipoCliente; //(1)Premium (2) Estandar
 
         //TODO Pedir todos los datos y actualizar las variables
         System.out.print("Introduzca el nombre del cliente: ");
@@ -212,30 +197,30 @@ public class Vista {
     }
 
     //GESTIÓN DE PEDIDOS
-    private void gestionarPedidos() {
+    private void menuGestionPedidos() {
     int opcion;
     do {
         System.out.println("\nGestión de Pedidos");
-        System.out.println("3.1. Añadir Pedido");
-        System.out.println("3.2. Eliminar Pedido");
-        System.out.println("3.3. Mostrar Pedidos Pendientes");
-        System.out.println("3.4. Mostrar Pedidos Enviados");
+        System.out.println("1. Añadir Pedido");
+        System.out.println("2. Eliminar Pedido");
+        System.out.println("3. Mostrar Pedidos Pendientes");
+        System.out.println("4. Mostrar Pedidos Enviados");
         System.out.println("0. Volver");
         System.out.print("Seleccione una opción: ");
         opcion = scanner.nextInt();
 
         switch (opcion) {
             case 1:
-                System.out.println("Añadir Pedido aún no implementado.");
+                anyadirPedido();
                 break;
             case 2:
-                System.out.println("Eliminar Pedido aún no implementado.");
+                eliminarPedido();
                 break;
             case 3:
-                System.out.println("Mostrar Pedidos Pendientes aún no implementado.");
+                mostrarPedidosPendientes();
                 break;
             case 4:
-                System.out.println("Mostrar Pedidos Enviados aún no implementado.");
+                mostrarPedidosEnviados();
                 break;
             case 0:
                 break;
@@ -246,9 +231,8 @@ public class Vista {
 }
     private void anyadirPedido(){
         String codigoArticulo;
-        Integer cantidad;
+        int cantidad;
         String emailCliente;
-
         System.out.print("Introduzca el código del artículo:");
         codigoArticulo = scanner.nextLine();
         System.out.print("Introduzca la cantidad:");
@@ -256,6 +240,7 @@ public class Vista {
         scanner.nextLine();//LIMPIA BUFFER
         System.out.print("Introduzca el e-mail del cliente:");
         emailCliente = scanner.nextLine();
+        controlador.esClienteNuevo(emailCliente);
         controlador.addPedido(codigoArticulo, cantidad, emailCliente);
     }
     private void eliminarPedido(){
@@ -264,10 +249,20 @@ public class Vista {
         scanner.nextLine();
         controlador.removePedido(numeroPedido);
     }
+
     private void mostrarPedidosPendientes(){
-        //TODO
+        String opcion;
+        System.out.println("Si desea filtrar por cliente escriba su correo electronico, si quiere ver todos los pedidos pendientes escriba T :");
+        opcion =scanner.nextLine();
+        controlador.mostrarPedidosPendientes(opcion);
+
     }
+
     private void mostrarPedidosEnviados(){
-        //TODO
+        String opcion;
+        System.out.println("Si desea filtrar por cliente escriba su correo electronico, si quiere ver todos los pedidos enviados escriba T :");
+        opcion =scanner.nextLine();
+        controlador.mostrarPedidosEnviados(opcion);
+
     }
 }
