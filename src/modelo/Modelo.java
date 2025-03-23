@@ -117,4 +117,9 @@ public class Modelo {
         }
         return false;
     }
+
+    public boolean eliminarPedido(Integer numeroPedido) {
+        // TODO En desarrollo
+    }
+
 }
