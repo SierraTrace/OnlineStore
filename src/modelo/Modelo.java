@@ -4,9 +4,11 @@ package modelo;
 
 
 import modelo.Cliente.Cliente;
+import modelo.enums.TipoEstado;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 public class Modelo {
@@ -118,8 +120,25 @@ public class Modelo {
         return false;
     }
 
+    
     public boolean eliminarPedido(Integer numeroPedido) {
-        // TODO En desarrollo
+        if (pedidos == null) {
+            throw new IllegalStateException("Lista de pedidos no inicializada");
+        }
+
+        Iterator<Pedido> iterator = pedidos.iterator();
+        while (iterator.hasNext()) {
+            Pedido pedido = iterator.next();
+            if (pedido.getNumeroPedido().equals(numeroPedido)) {
+                pedido.actualizarEstadoPreparacion();
+                //Verificar si el estado permite eliminación
+                if (pedido.getEstado().equals(TipoEstado.PENDIENTE)) {
+                    iterator.remove(); // Elimina el pedido
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
