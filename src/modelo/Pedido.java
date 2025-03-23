@@ -58,7 +58,7 @@ public class  Pedido {
         }
     }
 
-    private TipoEstado getEstado() {
+    public TipoEstado getEstado() {
         return estado;
     }
 
