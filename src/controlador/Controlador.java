@@ -143,9 +143,29 @@ public class Controlador {
     ///////////////////////Gestión de Pedidos//////////////////////////
     //ACTUALIZA MODELO: Permite añadir un pedido al modelo.
     public void addPedido(String codigoArticulo, Integer cantidadArticulos, String emailCliente) {
-        Integer numeroPedido = modeloTienda.generarProximoPedido();
+        if (codigoArticulo == null || codigoArticulo.isEmpty()) {
+            vistaTienda.updateView("Error: Código de artículo inválido");
+            return;
+        }
+        if (emailCliente == null || emailCliente.isEmpty()) {
+            vistaTienda.updateView("Error: Email del cliente inválido");
+            return;
+        }
         Articulo articulo = modeloTienda.getArticulo(codigoArticulo);
+        if (articulo == null) {
+            vistaTienda.updateView("Error: El artículo no existe");
+            return;
+        }
         Cliente cliente = modeloTienda.getCliente(emailCliente);
+        if (cliente == null) {
+            vistaTienda.updateView("Error: El cliente no existe");
+            return;
+        }
+        if (cantidadArticulos == null || cantidadArticulos <= 0) {
+            vistaTienda.updateView("Error: La cantidad debe ser mayor que cero");
+            return;
+        }
+        Integer numeroPedido = modeloTienda.generarProximoPedido();
         Pedido pedido = new Pedido(numeroPedido, articulo, cantidadArticulos, cliente);
         modeloTienda.addPedido(pedido);
         vistaTienda.updateView("Pedido añadido con el número: "+ numeroPedido);
@@ -174,8 +194,8 @@ public class Controlador {
     // si el tiempo transcurrido a desde la fecha y hora del pedido no supera el tiempo de preparación
     // para el envío del artículo.
     private boolean esBorrable(int numeroPedido){
-       Pedido pedido = getPedido(numeroPedido);
-       return pedido.getEstado() != TipoEstado.ENVIADO;
+        Pedido pedido = getPedido(numeroPedido);
+        return pedido.getEstado() != TipoEstado.ENVIADO;
     }
 
     private <E> List<E> getListaPedidos(){
@@ -186,7 +206,11 @@ public class Controlador {
     public void mostrarPedidosPendientes(String iDcliente) {
         if (Objects.equals(iDcliente, "T")){
             mostrarTodosLosPedidosPendientes();
-        }else{
+        } else {
+            if (!esClienteRegistrado(iDcliente)) {
+                vistaTienda.updateView("El cliente con email '" + iDcliente + "' no está registrado.\n");
+                return;
+            }
             mostrarPedidoPendientesPorCliente(iDcliente);
         }
     }
@@ -219,7 +243,11 @@ public class Controlador {
     public void mostrarPedidosEnviados(String emailCliente) {
         if (Objects.equals(emailCliente, "T")){
             mostrarTodosLosPedidosEnviados();
-        }else{
+        } else {
+            if (!esClienteRegistrado(emailCliente)) {
+                vistaTienda.updateView("El cliente con email '" + emailCliente + "' no está registrado.\n");
+                return;
+            }
             mostrarPedidoEnviadosPorCliente(emailCliente);
         }
     }
@@ -250,4 +278,3 @@ public class Controlador {
 
 
 }
-

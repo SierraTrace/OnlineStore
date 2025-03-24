@@ -5,6 +5,8 @@ package modelo;
 
 import modelo.Cliente.Cliente;
 import modelo.enums.TipoEstado;
+import modelo.Cliente.ClienteEstandar;
+import modelo.Cliente.ClientePremium;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +19,37 @@ public class Modelo {
     private ArrayList<Articulo> articulos;
     private ArrayList<Pedido> pedidos;
     private Integer proximoPedido;
+
+    public void cargarDatosIniciales() {
+        // Artículos
+        Articulo a1 = new Articulo("100", "Mesa", 20f, 7f, 3);
+        Articulo a2 = new Articulo("101", "Tabla", 40f, 2f, 2);
+        Articulo a3 = new Articulo("102", "Silla", 30f, 1f, 1);
+        addArticulo(a1);
+        addArticulo(a2);
+        addArticulo(a3);
+
+        // Clientes
+        Cliente c1 = new ClienteEstandar("Esteban Casa", "Calle Eterna", "11111111D", "esteban@c.com");
+        Cliente c2 = new ClientePremium("Elisa Techo", "Avenida Sol 45", "11111111A", "elisa@c.com");
+        Cliente c3 = new ClienteEstandar("Eduardo Mole", "Plaza Mayor 8", "11111111V", "eduardo@c.com");
+        addCliente(c1);
+        addCliente(c2);
+        addCliente(c3);
+
+        // Pedidos PENDIENTES
+        Pedido p1 = new Pedido(generarProximoPedido(), a1, 1, c1); // ana@correo.com
+        Pedido p2 = new Pedido(generarProximoPedido(), a2, 2, c2); // luis@correo.com
+        addPedido(p1);
+        addPedido(p2);
+
+        // Pedidos ENVIADOS
+        Pedido p3 = new Pedido(generarProximoPedido(), a3, 1, c3); // marta@correo.com
+        Pedido p4 = new Pedido(generarProximoPedido(), a1, 1, c2); // luis@correo.com
+
+        addPedido(p3);
+        addPedido(p4);
+    }
 
 
     public Modelo() {
@@ -48,14 +81,15 @@ public class Modelo {
         return clientes.get(email);
     }
 
-    public Cliente getPedido(Integer numeroPedido) {
+    public Pedido getPedido(Integer numeroPedido) {
         for (Pedido pedido : pedidos) {
             if (pedido.getNumeroPedido().equals(numeroPedido)) {
-                return pedido.getCliente();
+                return pedido;
             }
         }
         return null;
     }
+
 
     public Articulo getArticulo(String codigoArticulo) {
         for (Articulo articulo : articulos) {
@@ -120,7 +154,7 @@ public class Modelo {
         return false;
     }
 
-    
+
     public boolean eliminarPedido(Integer numeroPedido) {
         if (pedidos == null) {
             throw new IllegalStateException("Lista de pedidos no inicializada");
