@@ -102,6 +102,10 @@ public class  Pedido {
         return fechaPedido;
     }
 
+    public void setFechaPedido(LocalDateTime fechaPedido) {
+        this.fechaPedido = fechaPedido;
+    }
+
     @Override
     public String toString() {
 
