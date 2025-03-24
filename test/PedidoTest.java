@@ -1,12 +1,18 @@
 import modelo.Articulo;
 import modelo.Cliente.Cliente;
+import modelo.Cliente.ClienteEstandar;
+import modelo.Cliente.ClientePremium;
 import modelo.Pedido;
 import modelo.enums.TipoEstado;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PedidoTest{
+
+    /////////////////////   TESTS DE ESTADO DE PREPARACION   /////////////////
 
     @Test
     void testActualizarEstadoPreparacionCumpleTiempo() {
@@ -46,5 +52,59 @@ class PedidoTest{
         assertEquals(TipoEstado.PENDIENTE, pedido.getEstado());
     }
 
-    
+    //////////////////  TESTS DE CALCULO TOTAL //////////////////
+
+
+    @Test
+    void testCalcularTotalConClientePremium() {
+
+        // Cliente premium por con descuento del 20%
+        ClientePremium clientePremium = new ClientePremium("Maria", "Su casa", "11111111A", "maria@email.com");
+        clientePremium.setDescuento(20);
+
+        // Articulo con valor 100, gastos 50
+        Articulo articulo = new Articulo("A111", "Artículo de prueba", 100.0f, 50.0f, 20);
+        // Pedido con 2 artículos
+        Pedido pedido = new Pedido(1, articulo, 2, clientePremium);
+
+        // Cálculo esperado:
+        double totalEsperado = (50 * (20 / 100.0)) + (100 * 2);
+
+        // Prueba
+        assertEquals(totalEsperado, pedido.calcularTotal(), 0.01);
+    }
+
+    @Test
+    void testCalcularTotalconClienteEstandar() {
+
+        // Cliente estandar
+        Cliente clienteEstandar = new ClienteEstandar("Maria", "Su casa", "11111111A", "maria@email.com");
+
+        // Articulo con valor 100, gastos 50
+        Articulo articulo = new Articulo("A111", "Artículo de prueba", 100.0f, 50.0f, 20);
+        // Pedido con 2 artículos
+        Pedido pedido = new Pedido(2, articulo, 2, clienteEstandar);
+
+        // Cálculo esperado:
+        double totalEsperado = 50 + (100 * 2);
+
+        // Prueba
+        assertEquals(totalEsperado, pedido.calcularTotal(), 0.01);
+    }
+
+    @Test
+    void testCalcularTotalconValoresNulos() {
+        // Valores extremos: artículo con valores a 0.
+
+        // Cliente estandar
+        Cliente clienteEstandar = new ClienteEstandar("Maria", "Su casa", "11111111A", "maria@email.com");
+
+        // Articulo con valor 0, gastos 0
+        Articulo articulo = new Articulo("A111", "Artículo de prueba", 0.0f, 0.0f, 20);
+        // Pedido con 0 artículos
+        Pedido pedido = new Pedido(3, articulo, 0, clienteEstandar);
+
+        // Prueba se espera que sea 0
+        assertEquals(0.0, pedido.calcularTotal(), 0.01);
+    }
 }
