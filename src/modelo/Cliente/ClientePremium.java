@@ -35,6 +35,10 @@ public class ClientePremium extends Cliente {
         this.cuotaAnual = cuotaAnual;
     }
 
+    public void setDescuento(Integer descuento) {
+        this.descuento = descuento;
+    }
+
     @Override
     public String toString() {
         return super.toString() + " Descuento: " + descuento + " Tipo: " + tipoCliente;

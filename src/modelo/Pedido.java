@@ -31,8 +31,7 @@ public class  Pedido {
         this.estado = TipoEstado.PENDIENTE;
     }
 
-    private double calcularTotal() {
-        // TODO Pendiente implementar test unitario
+    public double calcularTotal() {
         // Calcular gastos de envío
         double gastosEnvio;
         if (cliente instanceof ClientePremium clientePremium) {
@@ -46,7 +45,6 @@ public class  Pedido {
     }
 
     public void actualizarEstadoPreparacion() {
-        // TODO Pendiente implementar test unitario
         if (estado == TipoEstado.PENDIENTE) {
             // Calcular el tiempo transcurrido
             long tiempoTranscurrido = Duration.between(fechaPedido, LocalDateTime.now()).toMinutes();
@@ -100,6 +98,10 @@ public class  Pedido {
 
     public LocalDateTime getFechaPedido() {
         return fechaPedido;
+    }
+
+    public void setFechaPedido(LocalDateTime fechaPedido) {
+        this.fechaPedido = fechaPedido;
     }
 
     @Override
