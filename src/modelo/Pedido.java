@@ -3,8 +3,8 @@
 package modelo;
 
 
-import modelo.Cliente.Cliente;
-import modelo.Cliente.ClientePremium;
+import modelo.cliente.Cliente;
+import modelo.cliente.ClientePremium;
 import modelo.enums.TipoEstado;
 
 import java.time.Duration;
@@ -31,6 +31,7 @@ public class  Pedido {
         this.estado = TipoEstado.PENDIENTE;
     }
 
+    // Metodo con pruebas unitarias
     public double calcularTotal() {
         // Calcular gastos de envío
         double gastosEnvio;
@@ -44,6 +45,7 @@ public class  Pedido {
         return gastosEnvio + (articulo.getPrecioVenta() * cantidadArticulos);
     }
 
+    // Metodo con pruebas unitarias
     public void actualizarEstadoPreparacion() {
         if (estado == TipoEstado.PENDIENTE) {
             // Calcular el tiempo transcurrido

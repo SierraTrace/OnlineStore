@@ -17,7 +17,7 @@ public class Vista {
         this.controlador = controlador;
         menuPrincipal();
     }
-    //Método genérico para mostrar por consola
+    //Metodo genérico para mostrar por consola
     public void updateView(String string){
         System.out.println(string);
     }
@@ -97,7 +97,6 @@ public class Vista {
             float gastosEnvio;
             int tiempoPreparacion;
 
-            //TODO Pedir todos los datos y actualizar las variables
             System.out.print("Introduzca la descripcion del articulo: ");
             descripcion = scanner.nextLine();
 
@@ -151,7 +150,6 @@ public class Vista {
         String nif;
         int tipoCliente; //(1)Premium (2) Estandar
 
-        //TODO Pedir todos los datos y actualizar las variables
         System.out.print("Introduzca el nombre del cliente: ");
         nombre = scanner.nextLine();
 
@@ -252,6 +250,7 @@ public class Vista {
 
     private void mostrarPedidosPendientes(){
         String opcion;
+        scanner.nextLine();
         System.out.println("Si desea filtrar por cliente escriba su correo electronico, si quiere ver todos los pedidos pendientes escriba T :");
         opcion =scanner.nextLine();
         controlador.mostrarPedidosPendientes(opcion);
@@ -260,6 +259,7 @@ public class Vista {
 
     private void mostrarPedidosEnviados(){
         String opcion;
+        scanner.nextLine();
         System.out.println("Si desea filtrar por cliente escriba su correo electronico, si quiere ver todos los pedidos enviados escriba T :");
         opcion =scanner.nextLine();
         controlador.mostrarPedidosEnviados(opcion);

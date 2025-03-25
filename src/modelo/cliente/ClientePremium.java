@@ -1,7 +1,7 @@
 // Grupo 2 - SQL SQUAD
 
 
-package modelo.Cliente;
+package modelo.cliente;
 
 import modelo.enums.TipoCliente;
 
