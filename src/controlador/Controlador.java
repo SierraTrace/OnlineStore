@@ -217,6 +217,7 @@ public class Controlador {
 
     //ACTUALIZA VISTA: con listado de pedidos pendientes filtrando por cliente
     private void mostrarPedidoPendientesPorCliente(String emailCliente) {
+        modeloTienda.actualizarPedido();
         List<Pedido> listaPedidos = getListaPedidos();
         StringBuilder sb = new StringBuilder();
         for (Pedido pedido : listaPedidos) {
@@ -229,6 +230,7 @@ public class Controlador {
 
     //ACTUALIZA VISTA: con listado de todos los pedidos pendientes
     private void mostrarTodosLosPedidosPendientes() {
+        modeloTienda.actualizarPedidos();
         List<Pedido> listaPedidos = getListaPedidos();
         StringBuilder sb = new StringBuilder();
         for (Pedido pedido : listaPedidos) {
@@ -239,8 +241,9 @@ public class Controlador {
         vistaTienda.updateView(sb.toString());
     }
 
-    //Llama al método correcto en base al emailCliente
+    //Llama al metodo correcto en base al emailCliente
     public void mostrarPedidosEnviados(String emailCliente) {
+        modeloTienda.actualizarPedidos();
         if (Objects.equals(emailCliente, "T")){
             mostrarTodosLosPedidosEnviados();
         } else {
@@ -254,6 +257,7 @@ public class Controlador {
 
     //ACTUALIZA VISTA:Crea listado de los pedidos enviados filtrados por cliente actualizando la vista
     private void mostrarPedidoEnviadosPorCliente(String emailCliente) {
+        modeloTienda.actualizarPedidos();
         List<Pedido> listaPedidos = getListaPedidos();
         StringBuilder sb = new StringBuilder();
         for (Pedido pedido : listaPedidos) {
@@ -266,6 +270,7 @@ public class Controlador {
 
     ////ACTUALIZA VISTA: Crea listado de todos los pedidos enviados actualizando la vista
     private void mostrarTodosLosPedidosEnviados() {
+        modeloTienda.actualizarPedidos();
         List<Pedido> listaPedidos = getListaPedidos();
         StringBuilder sb = new StringBuilder();
         for (Pedido pedido : listaPedidos) {
