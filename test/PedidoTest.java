@@ -1,7 +1,7 @@
 import modelo.Articulo;
-import modelo.Cliente.Cliente;
-import modelo.Cliente.ClienteEstandar;
-import modelo.Cliente.ClientePremium;
+import modelo.cliente.Cliente;
+import modelo.cliente.ClienteEstandar;
+import modelo.cliente.ClientePremium;
 import modelo.Pedido;
 import modelo.enums.TipoEstado;
 import org.junit.jupiter.api.Test;

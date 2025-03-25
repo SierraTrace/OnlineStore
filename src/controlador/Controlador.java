@@ -3,9 +3,9 @@ package controlador;
 // el paquete controlador únicamente contendrá la clase Controlador, que hará de puente entre la vista y el modelo.
 // La vista sólo podrá utilizar esta clase para acceder a la información del modelo.
 
-import modelo.Cliente.Cliente;
-import modelo.Cliente.ClienteEstandar;
-import modelo.Cliente.ClientePremium;
+import modelo.cliente.Cliente;
+import modelo.cliente.ClienteEstandar;
+import modelo.cliente.ClientePremium;
 import modelo.enums.TipoEstado;
 import vista.Vista;
 

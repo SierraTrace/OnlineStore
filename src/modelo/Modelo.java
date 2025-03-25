@@ -3,10 +3,10 @@ package modelo;
 // Grupo 2 - SQL SQUAD
 
 
-import modelo.Cliente.Cliente;
+import modelo.cliente.Cliente;
 import modelo.enums.TipoEstado;
-import modelo.Cliente.ClienteEstandar;
-import modelo.Cliente.ClientePremium;
+import modelo.cliente.ClienteEstandar;
+import modelo.cliente.ClientePremium;
 
 import java.util.ArrayList;
 import java.util.HashMap;

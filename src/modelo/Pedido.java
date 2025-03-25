@@ -3,8 +3,8 @@
 package modelo;
 
 
-import modelo.Cliente.Cliente;
-import modelo.Cliente.ClientePremium;
+import modelo.cliente.Cliente;
+import modelo.cliente.ClientePremium;
 import modelo.enums.TipoEstado;
 
 import java.time.Duration;
