@@ -68,7 +68,7 @@ class PedidoTest{
         Pedido pedido = new Pedido(1, articulo, 2, clientePremium);
 
         // Cálculo esperado:
-        double totalEsperado = (50 * (20 / 100.0)) + (100 * 2);
+        double totalEsperado = (50 * (20 / 100.0)) + (100 * 2); // TODO probando
 
         // Prueba
         assertEquals(totalEsperado, pedido.calcularTotal(), 0.01);

@@ -202,7 +202,7 @@ public class Controlador {
         return (List<E>)modeloTienda.getPedidos();
     }
 
-    //Llama al método correcto en base al emailCliente
+    //Llama al metodo correcto en base al emailCliente
     public void mostrarPedidosPendientes(String iDcliente) {
         if (Objects.equals(iDcliente, "T")){
             mostrarTodosLosPedidosPendientes();
@@ -217,7 +217,7 @@ public class Controlador {
 
     //ACTUALIZA VISTA: con listado de pedidos pendientes filtrando por cliente
     private void mostrarPedidoPendientesPorCliente(String emailCliente) {
-        modeloTienda.actualizarPedido();
+        modeloTienda.actualizarPedidos();
         List<Pedido> listaPedidos = getListaPedidos();
         StringBuilder sb = new StringBuilder();
         for (Pedido pedido : listaPedidos) {

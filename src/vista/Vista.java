@@ -17,7 +17,7 @@ public class Vista {
         this.controlador = controlador;
         menuPrincipal();
     }
-    //Método genérico para mostrar por consola
+    //Metodo genérico para mostrar por consola
     public void updateView(String string){
         System.out.println(string);
     }
@@ -97,7 +97,6 @@ public class Vista {
             float gastosEnvio;
             int tiempoPreparacion;
 
-            //TODO Pedir todos los datos y actualizar las variables
             System.out.print("Introduzca la descripcion del articulo: ");
             descripcion = scanner.nextLine();
 
@@ -151,7 +150,6 @@ public class Vista {
         String nif;
         int tipoCliente; //(1)Premium (2) Estandar
 
-        //TODO Pedir todos los datos y actualizar las variables
         System.out.print("Introduzca el nombre del cliente: ");
         nombre = scanner.nextLine();
 
