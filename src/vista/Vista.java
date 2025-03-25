@@ -250,6 +250,7 @@ public class Vista {
 
     private void mostrarPedidosPendientes(){
         String opcion;
+        scanner.nextLine();
         System.out.println("Si desea filtrar por cliente escriba su correo electronico, si quiere ver todos los pedidos pendientes escriba T :");
         opcion =scanner.nextLine();
         controlador.mostrarPedidosPendientes(opcion);
@@ -258,6 +259,7 @@ public class Vista {
 
     private void mostrarPedidosEnviados(){
         String opcion;
+        scanner.nextLine();
         System.out.println("Si desea filtrar por cliente escriba su correo electronico, si quiere ver todos los pedidos enviados escriba T :");
         opcion =scanner.nextLine();
         controlador.mostrarPedidosEnviados(opcion);

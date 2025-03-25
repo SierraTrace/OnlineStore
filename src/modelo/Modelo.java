@@ -146,8 +146,8 @@ public class Modelo {
 
     public void cargarDatosIniciales() {
         // Artículos
-        Articulo a1 = new Articulo("100", "Mesa", 20f, 7f, 3);
-        Articulo a2 = new Articulo("101", "Tabla", 40f, 2f, 2);
+        Articulo a1 = new Articulo("100", "Mesa", 20f, 7f, 30);
+        Articulo a2 = new Articulo("101", "Tabla", 40f, 2f, 20);
         Articulo a3 = new Articulo("102", "Silla", 30f, 1f, 1);
         addArticulo(a1);
         addArticulo(a2);
@@ -162,14 +162,14 @@ public class Modelo {
         addCliente(c3);
 
         // Pedidos PENDIENTES
-        Pedido p1 = new Pedido(generarProximoPedido(), a1, 1, c1); // ana@correo.com
-        Pedido p2 = new Pedido(generarProximoPedido(), a2, 2, c2); // luis@correo.com
+        Pedido p1 = new Pedido(generarProximoPedido(), a1, 1, c1);
+        Pedido p2 = new Pedido(generarProximoPedido(), a2, 2, c2);
         addPedido(p1);
         addPedido(p2);
 
         // Pedidos ENVIADOS
-        Pedido p3 = new Pedido(generarProximoPedido(), a3, 1, c3); // marta@correo.com
-        Pedido p4 = new Pedido(generarProximoPedido(), a1, 1, c2); // luis@correo.com
+        Pedido p3 = new Pedido(generarProximoPedido(), a3, 1, c3); // eduardo@.com
+        Pedido p4 = new Pedido(generarProximoPedido(), a1, 1, c2);
 
         addPedido(p3);
         addPedido(p4);
