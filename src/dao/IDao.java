@@ -3,7 +3,7 @@ package dao;
 import java.util.List;
 import java.util.Optional;
 
-public interface Dao<T> {
+public interface IDao<T> {
 
     Optional<T> get(long id);
     List<T> getAll();
