@@ -17,3 +17,12 @@ public class FactoryDAO {
         }
     }
 }
+
+// Como usarlo:
+/*
+Ejemplo:
+
+IDao articuloDAO = FactoryDAO.getDAO("ARTICULO");
+articuloDAO.get(1) // Obtiene el artículo con ID "1" de la BBDD
+
+ */
