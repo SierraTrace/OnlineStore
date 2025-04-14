@@ -21,14 +21,14 @@ public class  Pedido {
     private LocalDateTime fechaPedido;
     private TipoEstado estado;
 
-    public Pedido(Integer numeroPedido, Articulo articulo, Integer cantidadArticulos, Cliente cliente) {
+    public Pedido(Integer numeroPedido, Articulo articulo, Integer cantidadArticulos, Cliente cliente, LocalDateTime fechaPedido, TipoEstado estadoPedido) {
         this.numeroPedido = numeroPedido;
         this.articulo = articulo;
         this.cantidadArticulos = cantidadArticulos;
         this.cliente = cliente;
         this.precioTotal = calcularTotal();
-        this.fechaPedido = LocalDateTime.now();
-        this.estado = TipoEstado.PENDIENTE;
+        this.fechaPedido = fechaPedido; //LocalDateTime.now();
+        this.estado = estadoPedido; //TipoEstado.PENDIENTE;
     }
 
     // Metodo con pruebas unitarias
@@ -104,6 +104,14 @@ public class  Pedido {
 
     public void setFechaPedido(LocalDateTime fechaPedido) {
         this.fechaPedido = fechaPedido;
+    }
+
+    public TipoEstado getTipoEstado() {
+        return estado;
+    }
+
+    public void setTipoEstado(TipoEstado estado) {
+        this.estado = estado;
     }
 
     @Override

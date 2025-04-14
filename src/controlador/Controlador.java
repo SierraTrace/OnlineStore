@@ -3,17 +3,19 @@ package controlador;
 // el paquete controlador únicamente contendrá la clase Controlador, que hará de puente entre la vista y el modelo.
 // La vista sólo podrá utilizar esta clase para acceder a la información del modelo.
 
+import modelo.Articulo;
+import modelo.Modelo;
+import modelo.Pedido;
 import modelo.cliente.Cliente;
 import modelo.cliente.ClienteEstandar;
 import modelo.cliente.ClientePremium;
 import modelo.enums.TipoEstado;
 import vista.Vista;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-
-import modelo.*;
 
 public class Controlador {
     private final Modelo modeloTienda;
@@ -60,13 +62,13 @@ public class Controlador {
     ///////////////////////Gestión de Clientes//////////////////////////
     /// Permite añadir un cliente al modelo y actualiza la vista para
     /// Indicar que se ha creado.
-    public void addCliente(String nombre, String domicilio, String nif, String email, Integer tipoCliente) {
+    public void addCliente(Long id, String nombre, String domicilio, String nif, String email, Integer tipoCliente) {
         if (tipoCliente==1){
-            ClientePremium cliente = new ClientePremium(nombre, domicilio, nif, email);
+            ClientePremium cliente = new ClientePremium(id, nombre, domicilio, nif, email);
             modeloTienda.addCliente(cliente);
             vistaTienda.updateView("Se ha creado un cliente Premium ");
         } else{
-            ClienteEstandar cliente = new ClienteEstandar(nombre, domicilio, nif, email);
+            ClienteEstandar cliente = new ClienteEstandar(id, nombre, domicilio, nif, email);
             modeloTienda.addCliente(cliente);
             vistaTienda.updateView("Se ha creado un cliente Estandar ");
         }
@@ -166,7 +168,7 @@ public class Controlador {
             return;
         }
         Integer numeroPedido = modeloTienda.generarProximoPedido();
-        Pedido pedido = new Pedido(numeroPedido, articulo, cantidadArticulos, cliente);
+        Pedido pedido = new Pedido(numeroPedido, articulo, cantidadArticulos, cliente, LocalDateTime.now(), TipoEstado.PENDIENTE);
         modeloTienda.addPedido(pedido);
         vistaTienda.updateView("Pedido añadido con el número: "+ numeroPedido);
     }

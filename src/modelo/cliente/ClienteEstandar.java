@@ -9,8 +9,8 @@ public class ClienteEstandar extends Cliente {
 
     private final TipoCliente tipoCliente;
 
-    public ClienteEstandar(String nombre, String domicilio, String nif, String email) {
-        super(nombre, domicilio, nif, email);
+    public ClienteEstandar(Long id, String nombre, String domicilio, String nif, String email) {
+        super(id, nombre, domicilio, nif, email);
         this.tipoCliente = TipoCliente.ESTANDARD;
     }
 

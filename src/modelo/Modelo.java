@@ -7,6 +7,7 @@ import modelo.cliente.Cliente;
 import modelo.enums.TipoEstado;
 import modelo.cliente.ClienteEstandar;
 import modelo.cliente.ClientePremium;
+import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -154,22 +155,22 @@ public class Modelo {
         addArticulo(a3);
 
         // Clientes
-        Cliente c1 = new ClienteEstandar("Esteban Casa", "Calle Eterna", "11111111D", "esteban@c.com");
-        Cliente c2 = new ClientePremium("Elisa Techo", "Avenida Sol 45", "11111111A", "elisa@c.com");
-        Cliente c3 = new ClienteEstandar("Eduardo Mole", "Plaza Mayor 8", "11111111V", "eduardo@c.com");
+        Cliente c1 = new ClienteEstandar(1L,"Esteban Casa", "Calle Eterna", "11111111D", "esteban@c.com");
+        Cliente c2 = new ClientePremium(2L, "Elisa Techo", "Avenida Sol 45", "11111111A", "elisa@c.com");
+        Cliente c3 = new ClienteEstandar(3L, "Eduardo Mole", "Plaza Mayor 8", "11111111V", "eduardo@c.com");
         addCliente(c1);
         addCliente(c2);
         addCliente(c3);
 
         // Pedidos PENDIENTES
-        Pedido p1 = new Pedido(generarProximoPedido(), a1, 1, c1);
-        Pedido p2 = new Pedido(generarProximoPedido(), a2, 2, c2);
+        Pedido p1 = new Pedido(generarProximoPedido(), a1, 1, c1, LocalDateTime.now(), TipoEstado.PENDIENTE);
+        Pedido p2 = new Pedido(generarProximoPedido(), a2, 2, c2, LocalDateTime.now(), TipoEstado.PENDIENTE);
         addPedido(p1);
         addPedido(p2);
 
         // Pedidos ENVIADOS
-        Pedido p3 = new Pedido(generarProximoPedido(), a3, 1, c3); // eduardo@.com
-        Pedido p4 = new Pedido(generarProximoPedido(), a1, 1, c2);
+        Pedido p3 = new Pedido(generarProximoPedido(), a3, 1, c3, LocalDateTime.now(), TipoEstado.PENDIENTE); // eduardo@.com
+        Pedido p4 = new Pedido(generarProximoPedido(), a1, 1, c2, LocalDateTime.now(), TipoEstado.PENDIENTE);
 
         addPedido(p3);
         addPedido(p4);

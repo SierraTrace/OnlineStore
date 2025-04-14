@@ -4,19 +4,20 @@
 package modelo.cliente;
 
 public class Cliente {
-
+    private long id;
     private String nombre;
     private String domicilio;
     private String nif;
     private String email;
 
-    public Cliente(String nombre, String domicilio, String nif, String email) {
+    public Cliente(long id, String nombre, String domicilio, String nif, String email) {
+        this.id =id;
         this.nombre = nombre;
         this.domicilio = domicilio;
         this.nif = nif;
         this.email = email;
     }
-
+    public long getId(){return id;}
     public String getNombre() {
         return nombre;
     }
@@ -29,6 +30,7 @@ public class Cliente {
     public String getEmail() {
         return email;
     }
+    public void setId(int id) {this.id = id;}
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -44,6 +46,6 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "Nombre: " + nombre + " Domicilio: " + domicilio + " Nif: " + nif + " Email: " + email;
+        return "Id: " + id + " Nombre: " + nombre + " Domicilio: " + domicilio + " Nif: " + nif + " Email: " + email;
     }
 }
