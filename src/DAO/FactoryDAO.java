@@ -1,6 +1,6 @@
 package DAO;
 
-// Factory nos permite clasificar nuestros DAOS y tener una única forma para crear Objetos DAO
+// Factory nos permite clasificar nuestros DAOS y tener una única forma centralizada para crear Objetos DAO
 
 public class FactoryDAO {
 

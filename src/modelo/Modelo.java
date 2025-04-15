@@ -3,6 +3,8 @@ package modelo;
 // Grupo 2 - SQL SQUAD
 
 
+import DAO.FactoryDAO;
+import DAO.IDao;
 import modelo.cliente.Cliente;
 import modelo.enums.TipoEstado;
 import modelo.cliente.ClienteEstandar;
@@ -29,13 +31,16 @@ public class Modelo {
         proximoPedido = 0;
     }
 
+    // TODO pendiente decidir si es necesario dado los ID de la BBDD
     public Integer generarProximoPedido() {
         return ++proximoPedido;
     }
 
     //Añaden a listados
     public void addArticulo(Articulo articulo) {
-        articulos.add(articulo);
+        // TODO Trabajando...
+        IDao articuloDAO = FactoryDAO.getIDAO("ARTICULO");
+        articuloDAO.save(articulo);
     }
 
     public void addPedido(Pedido pedido) {
@@ -145,6 +150,11 @@ public class Modelo {
         return false;
     }
 
+
+
+
+    // TODO los datos iniciales ya estarán integrados en BBDD
+    /*
     public void cargarDatosIniciales() {
         // Artículos
         Articulo a1 = new Articulo("100", "Mesa", 20f, 7f, 30);
@@ -175,4 +185,5 @@ public class Modelo {
         addPedido(p3);
         addPedido(p4);
     }
+     */
 }
