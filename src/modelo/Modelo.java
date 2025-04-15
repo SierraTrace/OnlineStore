@@ -48,12 +48,13 @@ public class Modelo {
     }
 
     public void addCliente(Cliente cliente) {
-        // TODO Trabajando...
-        clientes.put(cliente.getEmail(), cliente);
+        IDao clienteDAO = FactoryDAO.getIDAO("CLIENTE");
+        clienteDAO.save(cliente);
     }
 
     //Getters individuales
     public Cliente getCliente(String email) {
+        // TODO Trabajando...
         return clientes.get(email);
     }
 
