@@ -14,7 +14,13 @@ public class ClienteDAO implements IDao {
     Connection conexion = null;
 
 
-    // TODO Los Clientes los buscamos por EMAIL, se debe rehacer para buscar sólo 1 cliente por email i retornar solo ese cliente
+    // TODO Pendiente implementar
+    @Override
+    public Optional getById(String id) {
+        return Optional.empty();
+    }
+
+    // TODO Los Clientes los buscamos por EMAIL implementar getById(String id)
     @Override
     public Optional get(Object o) {
         if (o instanceof Cliente) {

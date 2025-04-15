@@ -54,10 +54,9 @@ public class Modelo {
 
     //Getters individuales
     public Cliente getCliente(String email) {
-        // TODO Pendiente de corregir ClienteDAO para obtener via EMAIL
-        IDao clienteDAO = FactoryDAO.getIDAO("CLIENTE");
-        Cliente cliente = (Cliente) clienteDAO.get(email).orElse(null);
-        return cliente;
+        // TODO Pendiente implementar getById(String id) en CLienteDAO
+        IDao<Cliente> clienteDAO = FactoryDAO.getIDAO("CLIENTE");
+        return clienteDAO.getById(email).orElse(null);
     }
 
     public Pedido getPedido(Integer numeroPedido) {
