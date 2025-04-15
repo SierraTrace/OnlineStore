@@ -1,7 +1,9 @@
 package vista;
+
+import controlador.Controlador;
+
 import java.io.PrintStream;
 import java.util.Scanner;
-import controlador.Controlador;
 
 public class Vista {
     Scanner scanner;
@@ -145,10 +147,14 @@ public class Vista {
         controlador.esClienteNuevo(emailCliente);
     }
     public void pedirDatosCliente(String emailCliente){
+        Long id;
         String nombre;
         String domicilio;
         String nif;
         int tipoCliente; //(1)Premium (2) Estandar
+
+        System.out.print("Introduzca el id del cliente: ");//TODO Es autogenerado, creo que no debería preguntarse sino asignarse según cuántos cl ya haya.
+        id = scanner.nextLong();
 
         System.out.print("Introduzca el nombre del cliente: ");
         nombre = scanner.nextLine();
@@ -162,7 +168,7 @@ public class Vista {
         System.out.print("Elija el tipo de cliente: (1)Premium (2) Estandar :");
         tipoCliente = scanner.nextInt();
 
-        controlador.addCliente(nombre, domicilio, nif, emailCliente, tipoCliente);
+        controlador.addCliente(id, nombre, domicilio, nif, emailCliente, tipoCliente);
 
     }
     private void menuMostrarClientes(){

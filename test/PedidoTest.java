@@ -19,11 +19,11 @@ class PedidoTest{
 
         //Articulo con 10 min de preparacion
         Articulo articulo = new Articulo("A111", "Artículo de prueba", 100.0f, 5.0f, 10);
-        Cliente cliente = new Cliente("Maria", "Su casa", "11111111A", "maria@email.com");
+        Cliente cliente = new Cliente(1, "Maria", "Su casa", "11111111A", "maria@email.com");
 
         //Pedido con fecha de hace 15 min
         LocalDateTime fechaPedido = LocalDateTime.now().minusMinutes(15);
-        Pedido pedido = new Pedido(1, articulo, 2, cliente);
+        Pedido pedido = new Pedido(1, articulo, 2, cliente, LocalDateTime.now(), TipoEstado.PENDIENTE);
         pedido.setFechaPedido(fechaPedido); //Introduccion manual de la fecha en Pedido
 
         // Llamada al metodo que vamos a testear
@@ -38,11 +38,11 @@ class PedidoTest{
 
         //Artículo con 20 min de preparacion
         Articulo articulo = new Articulo("A111", "Artículo de prueba", 100.0f, 5.0f, 20);
-        Cliente cliente = new Cliente("Maria", "Su casa", "11111111A", "maria@email.com");
+        Cliente cliente = new Cliente(1, "Maria", "Su casa", "11111111A", "maria@email.com");
 
         //Pedido con fecha de hace 10 min
         LocalDateTime fechaPedido = LocalDateTime.now().minusMinutes(10);
-        Pedido pedido = new Pedido(1, articulo, 2, cliente);
+        Pedido pedido = new Pedido(1, articulo, 2, cliente, LocalDateTime.now(), TipoEstado.PENDIENTE);
         pedido.setFechaPedido(fechaPedido); // Introduccion manual de la fecha en pedido
 
         // Llamada al metodo que vamos a testear
@@ -59,13 +59,13 @@ class PedidoTest{
     void testCalcularTotalConClientePremium() {
 
         // Cliente premium por con descuento del 20%
-        ClientePremium clientePremium = new ClientePremium("Maria", "Su casa", "11111111A", "maria@email.com");
+        ClientePremium clientePremium = new ClientePremium(1L, "Maria", "Su casa", "11111111A", "maria@email.com");
         clientePremium.setDescuento(20);
 
         // Articulo con valor 100, gastos 50
         Articulo articulo = new Articulo("A111", "Artículo de prueba", 100.0f, 50.0f, 20);
         // Pedido con 2 artículos
-        Pedido pedido = new Pedido(1, articulo, 2, clientePremium);
+        Pedido pedido = new Pedido(1, articulo, 2, clientePremium, LocalDateTime.now(), TipoEstado.PENDIENTE);
 
         // Cálculo esperado:
         double totalEsperado = (50 * (20 / 100.0)) + (100 * 2);
@@ -78,12 +78,12 @@ class PedidoTest{
     void testCalcularTotalconClienteEstandar() {
 
         // Cliente estandar
-        Cliente clienteEstandar = new ClienteEstandar("Maria", "Su casa", "11111111A", "maria@email.com");
+        Cliente clienteEstandar = new ClienteEstandar(1L, "Maria", "Su casa", "11111111A", "maria@email.com");
 
         // Articulo con valor 100, gastos 50
         Articulo articulo = new Articulo("A111", "Artículo de prueba", 100.0f, 50.0f, 20);
         // Pedido con 2 artículos
-        Pedido pedido = new Pedido(2, articulo, 2, clienteEstandar);
+        Pedido pedido = new Pedido(2, articulo, 2, clienteEstandar, LocalDateTime.now(), TipoEstado.PENDIENTE);
 
         // Cálculo esperado:
         double totalEsperado = 50 + (100 * 2);
@@ -97,12 +97,12 @@ class PedidoTest{
         // Valores extremos: artículo con valores a 0.
 
         // Cliente estandar
-        Cliente clienteEstandar = new ClienteEstandar("Maria", "Su casa", "11111111A", "maria@email.com");
+        Cliente clienteEstandar = new ClienteEstandar(1L, "Maria", "Su casa", "11111111A", "maria@email.com");
 
         // Articulo con valor 0, gastos 0
         Articulo articulo = new Articulo("A111", "Artículo de prueba", 0.0f, 0.0f, 20);
         // Pedido con 0 artículos
-        Pedido pedido = new Pedido(3, articulo, 0, clienteEstandar);
+        Pedido pedido = new Pedido(3, articulo, 0, clienteEstandar, LocalDateTime.now(), TipoEstado.PENDIENTE);
 
         // Prueba se espera que sea 0
         assertEquals(0.0, pedido.calcularTotal(), 0.01);
