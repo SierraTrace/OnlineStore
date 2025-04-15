@@ -12,6 +12,9 @@ import java.util.Optional;
 
 public class ClienteDAO implements IDao {
     Connection conexion = null;
+
+
+    // TODO Los Clientes los buscamos por EMAIL, se debe rehacer para buscar sólo 1 cliente por email i retornar solo ese cliente
     @Override
     public Optional get(Object o) {
         if (o instanceof Cliente) {
@@ -38,7 +41,7 @@ public class ClienteDAO implements IDao {
                                 resultado.getString("nif"),
                                 resultado.getString("email")
                         );
-                        return Optional.of(cliente);
+                        return Optional.ofNullable(cliente);  // Permite el retorno de null
                     }
                 }
             }

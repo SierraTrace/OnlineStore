@@ -54,11 +54,14 @@ public class Modelo {
 
     //Getters individuales
     public Cliente getCliente(String email) {
-        // TODO Trabajando...
-        return clientes.get(email);
+        // TODO Pendiente de corregir ClienteDAO para obtener via EMAIL
+        IDao clienteDAO = FactoryDAO.getIDAO("CLIENTE");
+        Cliente cliente = (Cliente) clienteDAO.get(email).orElse(null);
+        return cliente;
     }
 
     public Pedido getPedido(Integer numeroPedido) {
+        // TODO Trabajando...
         for (Pedido pedido : pedidos) {
             if (pedido.getNumeroPedido().equals(numeroPedido)) {
                 return pedido;
