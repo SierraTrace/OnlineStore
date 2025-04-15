@@ -3,6 +3,8 @@ package modelo;
 // Grupo 2 - SQL SQUAD
 
 
+import DAO.FactoryDAO;
+import DAO.IDao;
 import modelo.cliente.Cliente;
 import modelo.enums.TipoEstado;
 import modelo.cliente.ClienteEstandar;
@@ -29,29 +31,36 @@ public class Modelo {
         proximoPedido = 0;
     }
 
+    // TODO pendiente decidir si es necesario dado los ID de la BBDD
     public Integer generarProximoPedido() {
         return ++proximoPedido;
     }
 
     //Añaden a listados
     public void addArticulo(Articulo articulo) {
-        articulos.add(articulo);
+        IDao articuloDAO = FactoryDAO.getIDAO("ARTICULO");
+        articuloDAO.save(articulo);
     }
 
     public void addPedido(Pedido pedido) {
-        pedidos.add(pedido);
+        IDao pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        pedidoDAO.save(pedido);
     }
 
     public void addCliente(Cliente cliente) {
-        clientes.put(cliente.getEmail(), cliente);
+        IDao clienteDAO = FactoryDAO.getIDAO("CLIENTE");
+        clienteDAO.save(cliente);
     }
 
     //Getters individuales
     public Cliente getCliente(String email) {
-        return clientes.get(email);
+        // TODO Pendiente implementar getById(String id) en CLienteDAO
+        IDao<Cliente> clienteDAO = FactoryDAO.getIDAO("CLIENTE");
+        return clienteDAO.getById(email).orElse(null);
     }
 
     public Pedido getPedido(Integer numeroPedido) {
+        // TODO Trabajando...
         for (Pedido pedido : pedidos) {
             if (pedido.getNumeroPedido().equals(numeroPedido)) {
                 return pedido;
@@ -145,6 +154,11 @@ public class Modelo {
         return false;
     }
 
+
+
+
+    // TODO los datos iniciales ya estarán integrados en BBDD
+    /*
     public void cargarDatosIniciales() {
         // Artículos
         Articulo a1 = new Articulo("100", "Mesa", 20f, 7f, 30);
@@ -175,4 +189,5 @@ public class Modelo {
         addPedido(p3);
         addPedido(p4);
     }
+     */
 }
