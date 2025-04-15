@@ -38,16 +38,17 @@ public class Modelo {
 
     //Añaden a listados
     public void addArticulo(Articulo articulo) {
-        // TODO Trabajando...
         IDao articuloDAO = FactoryDAO.getIDAO("ARTICULO");
         articuloDAO.save(articulo);
     }
 
     public void addPedido(Pedido pedido) {
-        pedidos.add(pedido);
+        IDao pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        pedidoDAO.save(pedido);
     }
 
     public void addCliente(Cliente cliente) {
+        // TODO Trabajando...
         clientes.put(cliente.getEmail(), cliente);
     }
 
