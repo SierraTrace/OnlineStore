@@ -12,6 +12,15 @@ import java.util.Optional;
 
 public class ClienteDAO implements IDao {
     Connection conexion = null;
+
+
+    // TODO Pendiente implementar
+    @Override
+    public Optional getById(String id) {
+        return Optional.empty();
+    }
+
+    // TODO Los Clientes los buscamos por EMAIL implementar getById(String id)
     @Override
     public Optional get(Object o) {
         if (o instanceof Cliente) {
@@ -38,7 +47,7 @@ public class ClienteDAO implements IDao {
                                 resultado.getString("nif"),
                                 resultado.getString("email")
                         );
-                        return Optional.of(cliente);
+                        return Optional.ofNullable(cliente);  // Permite el retorno de null
                     }
                 }
             }

@@ -122,6 +122,7 @@ public class ArticuloDAO implements IDao {
                 sqlOriginal.setFloat(3, articulo.getGastosEnvio());
                 sqlOriginal.setInt(4, articulo.getTiempoPreparacion());
 
+                // TODO Quitar trazas
                 int filasAfectadas = sqlOriginal.executeUpdate();
                 System.out.println(filasAfectadas + " filas modificadas.");
             }
