@@ -66,12 +66,9 @@ public class Modelo {
     }
 
     public Articulo getArticulo(String codigoArticulo) {
-        for (Articulo articulo : articulos) {
-            if (articulo.getCodigoArticulo().equals(codigoArticulo)) {
-                return articulo;
-            }
-        }
-        return null;
+        // TODO Pendiente implementar getById(String id) en ArticuloDAO
+        IDao<Articulo> articuloDAO = FactoryDAO.getIDAO("ARTICULO");
+        return articuloDAO.getById(codigoArticulo).orElse(null);
     }
 
     //Getters de listados
