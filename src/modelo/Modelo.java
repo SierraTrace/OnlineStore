@@ -73,6 +73,11 @@ public class Modelo {
 
     //Getters de listados
     public HashMap<String, Cliente> getListaClientes() {
+        // TODO pendiente modificar
+        IDao<Cliente> clienteDAO = FactoryDAO.getIDAO("CLIENTE");
+
+
+
         if (clientes == null) {
             throw new IllegalStateException("Mapa de clientes no inicializado");
         }
@@ -80,6 +85,7 @@ public class Modelo {
     }
 
     public ArrayList<Articulo> getArticulos() {
+        // TODO pendiente modificar
         if (articulos == null) {
             throw new IllegalStateException("Lista de articulos no inicializada");
         }
@@ -87,6 +93,7 @@ public class Modelo {
     }
 
     public ArrayList<Pedido> getPedidos() {
+        // TODO pendiente modificar
         return pedidos;
     }
 
@@ -95,6 +102,7 @@ public class Modelo {
     }
 
     public boolean existeArticulo(String codigoArticulo) {
+        // TODO pendiente modificar
         for (Articulo articulo : articulos) {
             if (articulo.getCodigoArticulo().equals(codigoArticulo)) {
                 return true;
@@ -104,6 +112,7 @@ public class Modelo {
     }
 
     public void actualizarPedidos() {
+        // TODO pendiente modificar
         if (pedidos == null) {
             throw new IllegalStateException("Lista de pedidos no inicializada");
         }
@@ -112,6 +121,7 @@ public class Modelo {
         }
     }
 
+    // TODO Sin uso, verificar si no es necesario
     public boolean actualizarPedido(Integer numeroPedido) {
         if (pedidos == null) {
             throw new IllegalStateException("Lista de pedidos no inicializada");
@@ -127,6 +137,7 @@ public class Modelo {
 
 
     public boolean eliminarPedido(Integer numeroPedido) {
+        // TODO pendiente modificar
         if (pedidos == null) {
             throw new IllegalStateException("Lista de pedidos no inicializada");
         }
