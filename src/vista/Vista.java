@@ -9,31 +9,35 @@ public class Vista {
     Scanner scanner;
     Controlador controlador;
     PrintStream streamSalida;
-    //Constructor
+    
+    // Constructor
     public Vista() {
-        this.scanner= new Scanner(System.in);
-        this.streamSalida= System.out;
+        this.scanner = new Scanner(System.in);
+        this.streamSalida = System.out;
     }
-    //Actualiza el controlador y comienza el menú principal
+    
+    // Actualiza el controlador y comienza el menú principal
     public void startVista(Controlador controlador) {
         this.controlador = controlador;
         menuPrincipal();
     }
-    //Metodo genérico para mostrar por consola
+    
+    // Método genérico para mostrar por consola
     public void updateView(String string){
         System.out.println(string);
     }
-    //Muestra el nivel más alto de jerarquía del menú y controla el bucle.
+    
+    // Muestra el nivel más alto de jerarquía del menú y controla el bucle.
     private void menuPrincipal(){
         int opcion;
-        do{
+        do {
             System.out.println("\nMenú Principal");
             System.out.println("1. Gestión de Artículos");
             System.out.println("2. Gestión de Clientes");
             System.out.println("3. Gestión de Pedidos");
             System.out.println("0. Salir");
-            System.out.print("Seleccione una opción: ");
-            opcion = scanner.nextInt();
+            // Se valida que la opción ingresada sea un entero
+            opcion = leerEntero("Seleccione una opción: ");
             switch (opcion) {
                 case 1:
                     menuGestionArticulos();
@@ -53,8 +57,8 @@ public class Vista {
         } while (opcion != 0);
     }
 
-    //GESTION DE ARTICULOS
-    //Menú de opciónes para la gestión de artículos
+    // GESTIÓN DE ARTÍCULOS
+    // Menú de opciones para la gestión de artículos
     private void menuGestionArticulos() {
         int opcion;
         do {
@@ -62,9 +66,8 @@ public class Vista {
             System.out.println("1. Añadir Artículos");
             System.out.println("2. Mostrar Artículos");
             System.out.println("0. Volver");
-            System.out.print("Seleccione una opción: ");
-            opcion = scanner.nextInt(); //Cambiar para evitar errores con no numéricos
-
+            // Validación de la opción ingresada
+            opcion = leerEntero("Seleccione una opción: ");
             switch (opcion) {
                 case 1:
                     anyadirArticulo();
@@ -79,98 +82,130 @@ public class Vista {
             }
         } while (opcion != 0);
     }
-    // E es el tipo genérico de la lista, los objetos de la lista deben tener metodo toString().
-    //Pide al controlador actualizar la vista con la lista de artículos
+    
+    // E es el tipo genérico de la lista, los objetos de la lista deben tener método toString().
+    // Pide al controlador actualizar la vista con la lista de artículos
     private void mostrarArticulos() {
         controlador.mostrarArticulos();
     }
-    //Inicia el proceso de alta de nuevo artículo
+    
+    // Inicia el proceso de alta de nuevo artículo
     private void anyadirArticulo() {
-        String codigoArticulo;
-        scanner.nextLine(); //LIMPIA BUFFER
-        System.out.print("Introduzca el código del articulo:");
-        codigoArticulo = scanner.nextLine();
+        // Se lee y valida que el código del artículo no esté vacío
+        String codigoArticulo = leerCadena("Introduzca el código del articulo: ");
         controlador.nuevoCodigoArticulo(codigoArticulo);
     }
-    //Pide el resto de datos al usuario
+    
+    // Pide el resto de datos al usuario
     public void pedirDatosArticulo(String codigoArticulo){
-            String descripcion;
-            float precioVenta;
-            float gastosEnvio;
-            int tiempoPreparacion;
+        String descripcion;
+        float precioVenta;
+        float gastosEnvio;
+        int tiempoPreparacion;
 
-            System.out.print("Introduzca la descripcion del articulo: ");
-            descripcion = scanner.nextLine();
+        // Se valida que la descripción no esté vacía
+        descripcion = leerCadena("Introduzca la descripcion del articulo: ");
 
-            System.out.print("Introduzca el precio de venta: ");
-            precioVenta = scanner.nextFloat();
+        // Se valida que el precio de venta sea un número positivo
+        while(true){
+            precioVenta = leerFloat("Introduzca el precio de venta: ");
+            if(precioVenta > 0){
+                break;
+            } else {
+                System.out.println("Error: el precio de venta debe ser mayor que 0.");
+            }
+        }
 
-            System.out.print("Introduzca los gastos de envio: ");
-            gastosEnvio = scanner.nextFloat();
+        // Se valida que los gastos de envío no sean negativos (se permite 0)
+        while(true){
+            gastosEnvio = leerFloat("Introduzca los gastos de envio: ");
+            if(gastosEnvio >= 0){
+                break;
+            } else {
+                System.out.println("Error: los gastos de envío no pueden ser negativos.");
+            }
+        }
 
-            System.out.print("Introduzca el tiempo de preparacion: ");
-            tiempoPreparacion = scanner.nextInt();
-            controlador.addArticulo(codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion);
+        // Se valida que el tiempo de preparación no sea negativo
+        while(true){
+            tiempoPreparacion = leerEntero("Introduzca el tiempo de preparacion: ");
+            if(tiempoPreparacion >= 0){
+                break;
+            } else {
+                System.out.println("Error: el tiempo de preparación no puede ser negativo.");
+            }
+        }
+        controlador.addArticulo(codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion);
     }
 
-
-    //GESTIÓN DE CLIENTES
+    // GESTIÓN DE CLIENTES
     private void menuGestionClientes() {
-    int opcion;
-    do {
-        System.out.println("\nGestión de Clientes");
-        System.out.println("1. Añadir Clientes");
-        System.out.println("2. Mostrar Clientes");
-        System.out.println("0. Volver");
-        System.out.print("Seleccione una opción: ");
-        opcion = scanner.nextInt();
-
-        switch (opcion) {
-            case 1:
-                anyadirCliente();
-                break;
-            case 2:
-                menuMostrarClientes();
-                break;
-            case 0:
-                break;
-            default:
-                System.out.println("Opción no válida. Intente de nuevo.");
-        }
-    } while (opcion != 0);
-}
+        int opcion;
+        do {
+            System.out.println("\nGestión de Clientes");
+            System.out.println("1. Añadir Clientes");
+            System.out.println("2. Mostrar Clientes");
+            System.out.println("0. Volver");
+            // Se valida que se ingrese un entero
+            opcion = leerEntero("Seleccione una opción: ");
+            switch (opcion) {
+                case 1:
+                    anyadirCliente();
+                    break;
+                case 2:
+                    menuMostrarClientes();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Opción no válida. Intente de nuevo.");
+            }
+        } while (opcion != 0);
+    }
+    
     private void anyadirCliente() {
-        String emailCliente;
-        scanner.nextLine(); //LIMPIA BUFFER
-        System.out.print("Introduzca el e-mail del cliente:");
-        emailCliente = scanner.nextLine();
+        // Se lee y valida que el email no esté vacío
+        String emailCliente = leerCadena("Introduzca el e-mail del cliente: ");
+        // Validación simple del formato del email (debe contener "@" y ".")
+        while (!validarEmail(emailCliente)) {
+            System.out.println("Error: el formato del email es inválido. Ejemplo: usuario@dominio.com");
+            emailCliente = leerCadena("Introduzca el e-mail del cliente: ");
+        }
         controlador.esClienteNuevo(emailCliente);
     }
+    
     public void pedirDatosCliente(String emailCliente){
         Long id;
         String nombre;
         String domicilio;
         String nif;
-        int tipoCliente; //(1)Premium (2) Estandar
+        int tipoCliente; //(1) Premium (2) Estandar
 
-        System.out.print("Introduzca el id del cliente: ");//TODO Es autogenerado, creo que no debería preguntarse sino asignarse según cuántos cl ya haya.
-        id = scanner.nextLong();
+        // Se valida que el id sea numérico y positivo
+        id = leerLong("Introduzca el id del cliente: ");
+        if(id < 0) {
+            System.out.println("Error: el id debe ser un número positivo. Se asignará un valor por defecto de 0.");
+            id = 0L;
+        }
 
-        System.out.print("Introduzca el nombre del cliente: ");
-        nombre = scanner.nextLine();
+        // Se leen las cadenas y se valida que no estén vacías
+        nombre = leerCadena("Introduzca el nombre del cliente: ");
+        domicilio = leerCadena("Introduzca el domicilio del cliente: ");
+        nif = leerCadena("Introduzca el nif del cliente: ");
 
-        System.out.print("Indroduzca el domicilio del cliente: ");
-        domicilio = scanner.nextLine();
-
-        System.out.print("Introduzca el nif del cliente: ");
-        nif = scanner.nextLine();
-
-        System.out.print("Elija el tipo de cliente: (1)Premium (2) Estandar :");
-        tipoCliente = scanner.nextInt();
+        // Se valida que el tipo de cliente sea 1 o 2
+        while(true){
+            tipoCliente = leerEntero("Elija el tipo de cliente: (1)Premium (2) Estandar : ");
+            if(tipoCliente == 1 || tipoCliente == 2){
+                break;
+            } else {
+                System.out.println("Error: opción inválida. Seleccione 1 para Premium o 2 para Estandar.");
+            }
+        }
 
         controlador.addCliente(id, nombre, domicilio, nif, emailCliente, tipoCliente);
-
     }
+    
     private void menuMostrarClientes(){
         int opcion;
         do {
@@ -179,9 +214,8 @@ public class Vista {
             System.out.println("2. Mostrar clientes Estandar");
             System.out.println("3. Mostrar clientes Premium");
             System.out.println("0. Volver");
-            System.out.print("Seleccione una opción: ");
-            opcion = scanner.nextInt();
-
+            // Validación de la opción ingresada
+            opcion = leerEntero("Seleccione una opción: ");
             switch (opcion) {
                 case 1:
                     controlador.mostrarClientes();
@@ -200,75 +234,193 @@ public class Vista {
         } while (opcion != 0);
     }
 
-    //GESTIÓN DE PEDIDOS
+    // GESTIÓN DE PEDIDOS
     private void menuGestionPedidos() {
-    int opcion;
-    do {
-        System.out.println("\nGestión de Pedidos");
-        System.out.println("1. Añadir Pedido");
-        System.out.println("2. Eliminar Pedido");
-        System.out.println("3. Mostrar Pedidos Pendientes");
-        System.out.println("4. Mostrar Pedidos Enviados");
-        System.out.println("0. Volver");
-        System.out.print("Seleccione una opción: ");
-        opcion = scanner.nextInt();
-
-        switch (opcion) {
-            case 1:
-                anyadirPedido();
-                break;
-            case 2:
-                eliminarPedido();
-                break;
-            case 3:
-                mostrarPedidosPendientes();
-                break;
-            case 4:
-                mostrarPedidosEnviados();
-                break;
-            case 0:
-                break;
-            default:
-                System.out.println("Opción no válida. Intente de nuevo.");
-        }
-    } while (opcion != 0);
-}
+        int opcion;
+        do {
+            System.out.println("\nGestión de Pedidos");
+            System.out.println("1. Añadir Pedido");
+            System.out.println("2. Eliminar Pedido");
+            System.out.println("3. Mostrar Pedidos Pendientes");
+            System.out.println("4. Mostrar Pedidos Enviados");
+            System.out.println("0. Volver");
+            // Se valida que se ingrese un entero
+            opcion = leerEntero("Seleccione una opción: ");
+            switch (opcion) {
+                case 1:
+                    anyadirPedido();
+                    break;
+                case 2:
+                    eliminarPedido();
+                    break;
+                case 3:
+                    mostrarPedidosPendientes();
+                    break;
+                case 4:
+                    mostrarPedidosEnviados();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Opción no válida. Intente de nuevo.");
+            }
+        } while (opcion != 0);
+    }
+    
     private void anyadirPedido(){
         String codigoArticulo;
         int cantidad;
         String emailCliente;
-        System.out.print("Introduzca el código del artículo:");
-        codigoArticulo = scanner.nextLine();
-        System.out.print("Introduzca la cantidad:");
-        cantidad = scanner.nextInt();
-        scanner.nextLine();//LIMPIA BUFFER
-        System.out.print("Introduzca el e-mail del cliente:");
-        emailCliente = scanner.nextLine();
+        
+        // Se valida que el código del artículo no esté vacío
+        codigoArticulo = leerCadena("Introduzca el código del artículo: ");
+        
+        // Se valida que la cantidad sea mayor que 0
+        while(true){
+            cantidad = leerEntero("Introduzca la cantidad: ");
+            if(cantidad > 0){
+                break;
+            } else {
+                System.out.println("Error: la cantidad debe ser mayor que 0.");
+            }
+        }
+        
+        // Se lee y valida el email del cliente
+        emailCliente = leerCadena("Introduzca el e-mail del cliente: ");
+        while (!validarEmail(emailCliente)) {
+            System.out.println("Error: el formato del email es inválido. Ejemplo: usuario@dominio.com");
+            emailCliente = leerCadena("Introduzca el e-mail del cliente: ");
+        }
         controlador.esClienteNuevo(emailCliente);
         controlador.addPedido(codigoArticulo, cantidad, emailCliente);
     }
+    
     private void eliminarPedido(){
-        System.out.print("Introduzca el número del pedido:");
-        Integer numeroPedido = scanner.nextInt();
-        scanner.nextLine();
+        // Se valida que el número de pedido sea un entero positivo
+        Integer numeroPedido = leerEntero("Introduzca el número del pedido: ");
+        if(numeroPedido <= 0) {
+            System.out.println("Error: el número del pedido debe ser mayor que 0.");
+            return;
+        }
         controlador.removePedido(numeroPedido);
     }
 
     private void mostrarPedidosPendientes(){
         String opcion;
-        scanner.nextLine();
-        System.out.println("Si desea filtrar por cliente escriba su correo electronico, si quiere ver todos los pedidos pendientes escriba T :");
-        opcion =scanner.nextLine();
+        opcion = leerCadena("Si desea filtrar por cliente escriba su correo electronico, si quiere ver todos los pedidos pendientes escriba T: ");
+        // Se valida que la opción ingresada sea 'T' o un email válido
+        if(!opcion.equalsIgnoreCase("T") && !validarEmail(opcion)){
+            System.out.println("Error: entrada inválida. Se esperaría 'T' o un correo electrónico válido. Se mostrarán todos los pedidos pendientes.");
+            opcion = "T";
+        }
         controlador.mostrarPedidosPendientes(opcion);
-
     }
 
     private void mostrarPedidosEnviados(){
         String opcion;
-        scanner.nextLine();
-        System.out.println("Si desea filtrar por cliente escriba su correo electronico, si quiere ver todos los pedidos enviados escriba T :");
-        opcion =scanner.nextLine();
+        opcion = leerCadena("Si desea filtrar por cliente escriba su correo electronico, si quiere ver todos los pedidos enviados escriba T: ");
+        // Se valida que la opción ingresada sea 'T' o un email válido
+        if(!opcion.equalsIgnoreCase("T") && !validarEmail(opcion)){
+            System.out.println("Error: entrada inválida. Se esperaría 'T' o un correo electrónico válido. Se mostrarán todos los pedidos enviados.");
+            opcion = "T";
+        }
         controlador.mostrarPedidosEnviados(opcion);
+    }
+    
+    // MÉTODOS AUXILIARES DE VALIDACIÓN
 
+    /**
+     * Lee y valida la entrada de un número entero.
+     * Se repite la solicitud hasta que se ingresa un entero válido.
+     * @param mensaje Mensaje a mostrar para solicitar la entrada.
+     * @return El entero leído.
+     */
+    private int leerEntero(String mensaje) {
+        int numero;
+        while (true) {
+            System.out.print(mensaje);
+            if(scanner.hasNextInt()){
+                numero = scanner.nextInt();
+                scanner.nextLine(); // Limpiar buffer
+                return numero;
+            } else {
+                System.out.println("Error: debe ingresar un número entero.");
+                scanner.nextLine(); // Consumir entrada inválida
+            }
+        }
+    }
+    
+    /**
+     * Lee y valida la entrada de un número flotante.
+     * Se repite la solicitud hasta que se ingresa un flotante válido.
+     * @param mensaje Mensaje a mostrar para solicitar la entrada.
+     * @return El número flotante leído.
+     */
+    private float leerFloat(String mensaje) {
+        float numero;
+        while (true) {
+            System.out.print(mensaje);
+            if(scanner.hasNextFloat()){
+                numero = scanner.nextFloat();
+                scanner.nextLine(); // Limpiar buffer
+                return numero;
+            } else {
+                System.out.println("Error: debe ingresar un número decimal.");
+                scanner.nextLine(); // Consumir entrada inválida
+            }
+        }
+    }
+    
+    /**
+     * Lee y valida la entrada de un número largo.
+     * Se repite la solicitud hasta que se ingresa un número largo válido.
+     * @param mensaje Mensaje a mostrar para solicitar la entrada.
+     * @return El número largo leído.
+     */
+    private long leerLong(String mensaje) {
+        long numero;
+        while (true) {
+            System.out.print(mensaje);
+            if(scanner.hasNextLong()){
+                numero = scanner.nextLong();
+                scanner.nextLine(); // Limpiar buffer
+                return numero;
+            } else {
+                System.out.println("Error: debe ingresar un número entero largo.");
+                scanner.nextLine(); // Consumir entrada inválida
+            }
+        }
+    }
+    
+    /**
+     * Lee y valida que la cadena ingresada no esté vacía.
+     * Se repite la solicitud hasta que se ingresa una cadena no vacía.
+     * @param mensaje Mensaje a mostrar para solicitar la entrada.
+     * @return La cadena no vacía leída.
+     */
+    private String leerCadena(String mensaje) {
+        String cadena;
+        while (true) {
+            System.out.print(mensaje);
+            cadena = scanner.nextLine().trim();
+            if(!cadena.isEmpty()){
+                return cadena;
+            } else {
+                System.out.println("Error: la entrada no puede estar vacía.");
+            }
+        }
+    }
+    
+    /**
+     * Realiza una validación simple del formato de un correo electrónico.
+     * Verifica que la cadena contenga "@" y ".".
+     * @param email La cadena a validar.
+     * @return true si el correo tiene un formato básico válido, false en caso contrario.
+     */
+    private boolean validarEmail(String email) {
+        if(email == null || email.trim().isEmpty()){
+            return false;
+        }
+        return email.contains("@") && email.contains(".");
     }
 }
