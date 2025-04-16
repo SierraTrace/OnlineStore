@@ -73,7 +73,7 @@ public class ClienteDAO implements IDao {
 
 
     @Override
-    public ArrayList getAll() { //Lo he cambiado por un Arraylist por sus ventajas.
+    public ArrayList getAll() {
 
         ArrayList<Cliente> clientes = new ArrayList<>();
         try {

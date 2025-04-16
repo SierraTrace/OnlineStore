@@ -12,6 +12,7 @@ import modelo.cliente.ClientePremium;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -73,15 +74,19 @@ public class Modelo {
 
     //Getters de listados
     public HashMap<String, Cliente> getListaClientes() {
-        // TODO pendiente modificar
+        // Recibimos un ArrayList de la BBDD y lo transformamos en HashMap
+        HashMap<String, Cliente> clientes = new HashMap<>();
         IDao<Cliente> clienteDAO = FactoryDAO.getIDAO("CLIENTE");
+        Collection<Cliente> listaClientes = clienteDAO.getAll();
 
-
-
-        if (clientes == null) {
-            throw new IllegalStateException("Mapa de clientes no inicializado");
+        if (listaClientes != null) {
+            for (Cliente cliente : listaClientes) {
+                clientes.put(cliente.getEmail(), cliente);
+            }
+        } else {
+            throw new IllegalStateException("Lista de clientes no inicializada");
         }
-        return new HashMap<String, Cliente>(clientes);
+        return clientes;
     }
 
     public ArrayList<Articulo> getArticulos() {
