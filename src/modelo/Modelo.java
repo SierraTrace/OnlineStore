@@ -11,10 +11,7 @@ import modelo.cliente.ClienteEstandar;
 import modelo.cliente.ClientePremium;
 import java.time.LocalDateTime;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 
 public class Modelo {
@@ -112,18 +109,14 @@ public class Modelo {
         }
     }
 
-    public String toString() {
-        return "Tienda OnLineStore de SQL Squad";
-    }
-
     public boolean existeArticulo(String codigoArticulo) {
-        // TODO pendiente modificar
-        for (Articulo articulo : articulos) {
-            if (articulo.getCodigoArticulo().equals(codigoArticulo)) {
-                return true;
-            }
+        IDao<Articulo> articuloDAO = FactoryDAO.getIDAO("ARTICULO");
+        Optional<Articulo> articulo = articuloDAO.getById(codigoArticulo);
+        if (articulo.isPresent()) {
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public void actualizarPedidos() {
@@ -170,6 +163,10 @@ public class Modelo {
             }
         }
         return false;
+    }
+
+    public String toString() {
+        return "Tienda OnLineStore de SQL Squad";
     }
 
 

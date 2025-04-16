@@ -19,7 +19,10 @@ public class ArticuloDAO implements IDao {
     // TODO Pendiente implementar
     @Override
     public Optional getById(String id) {
-        return Optional.empty();
+        return Optional.ofNullable(null);
+
+        // TODO Se requiere que si no existe retorne Optional.ofNullable(null)
+
     }
 
 
