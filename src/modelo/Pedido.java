@@ -21,7 +21,8 @@ public class  Pedido {
     private LocalDateTime fechaPedido;
     private TipoEstado estado;
 
-    public Pedido(Integer numeroPedido, Articulo articulo, Integer cantidadArticulos, Cliente cliente, LocalDateTime fechaPedido, TipoEstado estadoPedido) {
+    public Pedido(Integer numeroPedido, Articulo articulo, Integer cantidadArticulos,
+                  Cliente cliente, LocalDateTime fechaPedido, TipoEstado estadoPedido) {
         this.numeroPedido = numeroPedido;
         this.articulo = articulo;
         this.cantidadArticulos = cantidadArticulos;

@@ -17,6 +17,14 @@ import java.sql.Timestamp;
 
 public class PedidoDAO implements IDao {
     Connection conexion = null;
+
+    // TODO Pendiente implementar
+    @Override
+    public Optional getById(String id) {
+        return Optional.empty();
+    }
+
+
     @Override
     public Optional get(Object o) {
         if (o instanceof Pedido) {

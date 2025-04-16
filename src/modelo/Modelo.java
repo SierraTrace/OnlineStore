@@ -60,15 +60,10 @@ public class Modelo {
     }
 
     public Pedido getPedido(Integer numeroPedido) {
-        // TODO Trabajando...
-        for (Pedido pedido : pedidos) {
-            if (pedido.getNumeroPedido().equals(numeroPedido)) {
-                return pedido;
-            }
-        }
-        return null;
+        // TODO Pendiente implementar getById(String id) en PedidoDAO
+        IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        return pedidoDAO.getById(numeroPedido.toString()).orElse(null);
     }
-
 
     public Articulo getArticulo(String codigoArticulo) {
         for (Articulo articulo : articulos) {
