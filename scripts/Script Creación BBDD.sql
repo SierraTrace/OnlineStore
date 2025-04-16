@@ -3,7 +3,7 @@
 DROP SCHEMA IF EXISTS `onlinestore` ;
 
 -- -----------------------------------------------------
--- Schema onlinestore
+-- BBDD onlinestore
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `onlinestore` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
 USE `onlinestore` ;
@@ -14,16 +14,18 @@ USE `onlinestore` ;
 DROP TABLE IF EXISTS `onlinestore`.`articulo` ;
 
 CREATE TABLE IF NOT EXISTS `onlinestore`.`articulo` (
+  `idArticulo` INT NOT NULL AUTO_INCREMENT,
   `codigoArticulo` VARCHAR(20) NOT NULL,
   `descripcion` TEXT NOT NULL,
   `precioVenta` FLOAT NOT NULL,
   `gastosEnvio` FLOAT NOT NULL,
   `tiempoPreparacion` INT NOT NULL,
-  PRIMARY KEY (`codigoArticulo`))
+  PRIMARY KEY (`codigoArticulo`),
+  UNIQUE KEY `idArticulo_UNIQUE` (`idArticulo`)
+)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
-
 
 -- -----------------------------------------------------
 -- Table `onlinestore`.`cliente`
@@ -31,6 +33,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 DROP TABLE IF EXISTS `onlinestore`.`cliente` ;
 
 CREATE TABLE IF NOT EXISTS `onlinestore`.`cliente` (
+  `idCliente` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(30) NOT NULL,
   `nif` VARCHAR(20) NOT NULL,
   `nombre` VARCHAR(70) NOT NULL,
@@ -38,13 +41,14 @@ CREATE TABLE IF NOT EXISTS `onlinestore`.`cliente` (
   `tipoCliente` ENUM('PREMIUM', 'ESTANDAR') NOT NULL,
   `descuento` INT NULL DEFAULT NULL,
   `cuotaAnual` FLOAT NULL DEFAULT NULL,
-  PRIMARY KEY (`email`))
+  PRIMARY KEY (`email`),
+  UNIQUE KEY `idCliente_UNIQUE` (`idCliente`)
+)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE UNIQUE INDEX `email` ON `onlinestore`.`cliente` (`email` ASC) VISIBLE;
-
 
 -- -----------------------------------------------------
 -- Table `onlinestore`.`pedido`
@@ -64,12 +68,13 @@ CREATE TABLE IF NOT EXISTS `onlinestore`.`pedido` (
     FOREIGN KEY (`codigoArticulo`)
     REFERENCES `onlinestore`.`articulo` (`codigoArticulo`),
   CONSTRAINT `pedido_ibfk_2`
-   FOREIGN KEY (`emailCliente`) 
-   REFERENCES `cliente` (`email`))
+    FOREIGN KEY (`emailCliente`)
+    REFERENCES `onlinestore`.`cliente` (`email`)
+)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE INDEX `codigoArticulo` ON `onlinestore`.`pedido` (`codigoArticulo` ASC) VISIBLE;
-
 CREATE INDEX `emailCliente` ON `onlinestore`.`pedido` (`emailCliente` ASC);
+
