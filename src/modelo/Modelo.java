@@ -76,6 +76,7 @@ public class Modelo {
     public HashMap<String, Cliente> getListaClientes() {
         // Recibimos un ArrayList de la BBDD y lo transformamos en HashMap
         HashMap<String, Cliente> clientes = new HashMap<>();
+
         IDao<Cliente> clienteDAO = FactoryDAO.getIDAO("CLIENTE");
         Collection<Cliente> listaClientes = clienteDAO.getAll();
 
@@ -84,17 +85,21 @@ public class Modelo {
                 clientes.put(cliente.getEmail(), cliente);
             }
         } else {
-            throw new IllegalStateException("Lista de clientes no inicializada");
+            throw new IllegalStateException("Lista de clientes vacía");
         }
         return clientes;
     }
 
     public ArrayList<Articulo> getArticulos() {
-        // TODO pendiente modificar
-        if (articulos == null) {
-            throw new IllegalStateException("Lista de articulos no inicializada");
+        // TODO Trabajando...
+        IDao<Articulo> articuloDAO = FactoryDAO.getIDAO("ARTICULO");
+        Collection<Articulo> listaArticulos = articuloDAO.getAll();
+
+        if (listaArticulos != null) {
+            return (ArrayList<Articulo>) listaArticulos;
+        } else {
+            throw new IllegalStateException("Lista de artículos vacía");
         }
-        return articulos;
     }
 
     public ArrayList<Pedido> getPedidos() {
