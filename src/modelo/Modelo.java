@@ -91,7 +91,6 @@ public class Modelo {
     }
 
     public ArrayList<Articulo> getArticulos() {
-        // TODO Trabajando...
         IDao<Articulo> articuloDAO = FactoryDAO.getIDAO("ARTICULO");
         Collection<Articulo> listaArticulos = articuloDAO.getAll();
 
@@ -103,8 +102,14 @@ public class Modelo {
     }
 
     public ArrayList<Pedido> getPedidos() {
-        // TODO pendiente modificar
-        return pedidos;
+        IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        Collection<Pedido> listaPedidos = pedidoDAO.getAll();
+
+        if (listaPedidos != null) {
+            return (ArrayList<Pedido>) listaPedidos;
+        } else {
+            throw new IllegalStateException("Lista de pedidos vacía");
+        }
     }
 
     public String toString() {
