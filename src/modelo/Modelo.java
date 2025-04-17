@@ -166,18 +166,4 @@ public class Modelo {
     public String toString() {
         return "Tienda OnLineStore de SQL Squad";
     }
-
-    // TODO Sin uso, verificar si no es necesario
-    public boolean actualizarPedido(Integer numeroPedido) {
-        if (pedidos == null) {
-            throw new IllegalStateException("Lista de pedidos no inicializada");
-        }
-        for (Pedido pedido : pedidos) {
-            if (pedido.getNumeroPedido().equals(numeroPedido)) {
-                pedido.actualizarEstadoPreparacion();
-                return true;
-            }
-        }
-        return false;
-    }
 }
