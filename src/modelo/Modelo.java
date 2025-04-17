@@ -26,7 +26,7 @@ public class Modelo {
     public Modelo() {
         // clientes = new HashMap<>();
         // articulos = new ArrayList<>();
-        pedidos = new ArrayList<>();
+        // pedidos = new ArrayList<>();
         proximoPedido = 0;
     }
 

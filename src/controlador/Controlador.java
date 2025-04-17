@@ -167,10 +167,10 @@ public class Controlador {
             vistaTienda.updateView("Error: La cantidad debe ser mayor que cero");
             return;
         }
-        Integer numeroPedido = modeloTienda.generarProximoPedido();
-        Pedido pedido = new Pedido(numeroPedido, articulo, cantidadArticulos, cliente, LocalDateTime.now(), TipoEstado.PENDIENTE);
+        // Integer numeroPedido = modeloTienda.generarProximoPedido();
+        Pedido pedido = new Pedido(articulo, cantidadArticulos, cliente, LocalDateTime.now(), TipoEstado.PENDIENTE);
         modeloTienda.addPedido(pedido);
-        vistaTienda.updateView("Pedido añadido con el número: "+ numeroPedido);
+        vistaTienda.updateView("Pedido añadido");
     }
     //ACTUALIZA MODELO:Permite eliminar un pedido del modelo.
     //Un pedido puede ser borrado únicamente si no ha sido enviado, es decir, si el tiempo transcurrido a desde
