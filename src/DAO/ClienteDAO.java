@@ -94,7 +94,7 @@ public class ClienteDAO implements IDao<Cliente> {
 
     @Override
     public void save(Object o) {
-        // TODO Trabajando...
+
         String sql = "INSERT INTO cliente (email, nif, nombre, domicilio, tipoCliente, descuento, cuotaAnual) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
