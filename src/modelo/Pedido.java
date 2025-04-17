@@ -21,7 +21,8 @@ public class  Pedido {
     private LocalDateTime fechaPedido;
     private TipoEstado estado;
 
-    public Pedido(Integer numeroPedido, Articulo articulo, Integer cantidadArticulos, Cliente cliente, LocalDateTime fechaPedido, TipoEstado estadoPedido) {
+    public Pedido(Integer numeroPedido, Articulo articulo, Integer cantidadArticulos,
+                  Cliente cliente, LocalDateTime fechaPedido, TipoEstado estadoPedido) {
         this.numeroPedido = numeroPedido;
         this.articulo = articulo;
         this.cantidadArticulos = cantidadArticulos;
@@ -46,7 +47,7 @@ public class  Pedido {
     }
 
     // Metodo con pruebas unitarias
-    public void actualizarEstadoPreparacion() {
+    public boolean actualizarEstadoPreparacion() {
         if (estado == TipoEstado.PENDIENTE) {
             // Calcular el tiempo transcurrido
             long tiempoTranscurrido = Duration.between(fechaPedido, LocalDateTime.now()).toMinutes();
@@ -54,6 +55,9 @@ public class  Pedido {
             // Actualizar estado se ha cumplido el tiempo de preparación
             if (tiempoTranscurrido >= articulo.getTiempoPreparacion()) {
                 estado = TipoEstado.ENVIADO;
+                return true;
+            } else {
+                return false;
             }
         }
     }

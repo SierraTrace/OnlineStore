@@ -17,6 +17,14 @@ import java.sql.Timestamp;
 
 public class PedidoDAO implements IDao {
     Connection conexion = null;
+
+    // TODO Pendiente implementar
+    @Override
+    public Optional getById(String id) {
+        return Optional.empty();
+    }
+
+
     @Override
     public Optional get(Object o) {
         if (o instanceof Pedido) {
@@ -223,6 +231,11 @@ public class PedidoDAO implements IDao {
 
     @Override
     public void update(Object o) {
+
+        // TODO Solo deberíamos actualizar el estado o todos los datos?
+        // TODO Implementar commit y rolback
+
+
         if (o instanceof Cliente) {
             Pedido pedido = (Pedido) o;
             try {

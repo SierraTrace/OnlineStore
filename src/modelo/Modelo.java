@@ -11,22 +11,21 @@ import modelo.cliente.ClienteEstandar;
 import modelo.cliente.ClientePremium;
 import java.time.LocalDateTime;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 
 public class Modelo {
 
-    private HashMap<String, Cliente> clientes;
-    private ArrayList<Articulo> articulos;
+    // TODO Pendientes de borrado
+    // private HashMap<String, Cliente> clientes;
+    // private ArrayList<Articulo> articulos;
     private ArrayList<Pedido> pedidos;
     private Integer proximoPedido;
 
 
     public Modelo() {
-        clientes = new HashMap<>();
-        articulos = new ArrayList<>();
+        // clientes = new HashMap<>();
+        // articulos = new ArrayList<>();
         pedidos = new ArrayList<>();
         proximoPedido = 0;
     }
@@ -38,17 +37,17 @@ public class Modelo {
 
     //Añaden a listados
     public void addArticulo(Articulo articulo) {
-        IDao articuloDAO = FactoryDAO.getIDAO("ARTICULO");
+        IDao<Articulo> articuloDAO = FactoryDAO.getIDAO("ARTICULO");
         articuloDAO.save(articulo);
     }
 
     public void addPedido(Pedido pedido) {
-        IDao pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
         pedidoDAO.save(pedido);
     }
 
     public void addCliente(Cliente cliente) {
-        IDao clienteDAO = FactoryDAO.getIDAO("CLIENTE");
+        IDao<Cliente> clienteDAO = FactoryDAO.getIDAO("CLIENTE");
         clienteDAO.save(cliente);
     }
 
@@ -60,81 +59,91 @@ public class Modelo {
     }
 
     public Pedido getPedido(Integer numeroPedido) {
-        // TODO Trabajando...
-        for (Pedido pedido : pedidos) {
-            if (pedido.getNumeroPedido().equals(numeroPedido)) {
-                return pedido;
-            }
-        }
-        return null;
+        // TODO Pendiente implementar getById(String id) en PedidoDAO
+        IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        return pedidoDAO.getById(numeroPedido.toString()).orElse(null);
     }
 
-
     public Articulo getArticulo(String codigoArticulo) {
-        for (Articulo articulo : articulos) {
-            if (articulo.getCodigoArticulo().equals(codigoArticulo)) {
-                return articulo;
-            }
-        }
-        return null;
+        // TODO Pendiente implementar getById(String id) en ArticuloDAO
+        IDao<Articulo> articuloDAO = FactoryDAO.getIDAO("ARTICULO");
+        return articuloDAO.getById(codigoArticulo).orElse(null);
     }
 
     //Getters de listados
     public HashMap<String, Cliente> getListaClientes() {
-        if (clientes == null) {
-            throw new IllegalStateException("Mapa de clientes no inicializado");
+        // Recibimos un ArrayList de la BBDD y lo transformamos en HashMap
+        HashMap<String, Cliente> clientes = new HashMap<>();
+
+        IDao<Cliente> clienteDAO = FactoryDAO.getIDAO("CLIENTE");
+        Collection<Cliente> listaClientes = clienteDAO.getAll();
+
+        if (listaClientes != null) {
+            for (Cliente cliente : listaClientes) {
+                clientes.put(cliente.getEmail(), cliente);
+            }
+        } else {
+            throw new IllegalStateException("Lista de clientes vacía");
         }
-        return new HashMap<String, Cliente>(clientes);
+        return clientes;
     }
 
     public ArrayList<Articulo> getArticulos() {
-        if (articulos == null) {
-            throw new IllegalStateException("Lista de articulos no inicializada");
+        IDao<Articulo> articuloDAO = FactoryDAO.getIDAO("ARTICULO");
+        Collection<Articulo> listaArticulos = articuloDAO.getAll();
+
+        if (listaArticulos != null) {
+            return (ArrayList<Articulo>) listaArticulos;
+        } else {
+            throw new IllegalStateException("Lista de artículos vacía");
         }
-        return articulos;
     }
 
     public ArrayList<Pedido> getPedidos() {
-        return pedidos;
-    }
+        IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        Collection<Pedido> listaPedidos = pedidoDAO.getAll();
 
-    public String toString() {
-        return "Tienda OnLineStore de SQL Squad";
+        if (listaPedidos != null) {
+            return (ArrayList<Pedido>) listaPedidos;
+        } else {
+            throw new IllegalStateException("Lista de pedidos vacía");
+        }
     }
 
     public boolean existeArticulo(String codigoArticulo) {
-        for (Articulo articulo : articulos) {
-            if (articulo.getCodigoArticulo().equals(codigoArticulo)) {
-                return true;
-            }
+        IDao<Articulo> articuloDAO = FactoryDAO.getIDAO("ARTICULO");
+        Optional<Articulo> articulo = articuloDAO.getById(codigoArticulo);
+        if (articulo.isPresent()) {
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public void actualizarPedidos() {
-        if (pedidos == null) {
-            throw new IllegalStateException("Lista de pedidos no inicializada");
-        }
-        for (Pedido pedido : pedidos) {
-            pedido.actualizarEstadoPreparacion();
-        }
-    }
 
-    public boolean actualizarPedido(Integer numeroPedido) {
-        if (pedidos == null) {
-            throw new IllegalStateException("Lista de pedidos no inicializada");
-        }
-        for (Pedido pedido : pedidos) {
-            if (pedido.getNumeroPedido().equals(numeroPedido)) {
-                pedido.actualizarEstadoPreparacion();
-                return true;
+        //Recuperamos todos los pedidos y solo actualizamos los que hayan cambiado de estado a enviado.
+        // Obtener los pedidos
+        IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        Collection<Pedido> listaPedidos = pedidoDAO.getAll();
+
+        // Recorrer pedidos 1 a 1 y actualizar solo los que requieran cambio.
+        if (listaPedidos != null) {
+            boolean control = false;
+            for (Pedido pedido : listaPedidos) {
+                control = pedido.actualizarEstadoPreparacion();
+                if (control) {
+                    pedidoDAO.update(pedido);
+                    control = false;
+                }
             }
+        } else {
+            throw new IllegalStateException("Lista de pedidos vacía");
         }
-        return false;
     }
-
 
     public boolean eliminarPedido(Integer numeroPedido) {
+        // TODO pendiente modificar
         if (pedidos == null) {
             throw new IllegalStateException("Lista de pedidos no inicializada");
         }
@@ -154,40 +163,7 @@ public class Modelo {
         return false;
     }
 
-
-
-
-    // TODO los datos iniciales ya estarán integrados en BBDD
-    /*
-    public void cargarDatosIniciales() {
-        // Artículos
-        Articulo a1 = new Articulo("100", "Mesa", 20f, 7f, 30);
-        Articulo a2 = new Articulo("101", "Tabla", 40f, 2f, 20);
-        Articulo a3 = new Articulo("102", "Silla", 30f, 1f, 1);
-        addArticulo(a1);
-        addArticulo(a2);
-        addArticulo(a3);
-
-        // Clientes
-        Cliente c1 = new ClienteEstandar(1L,"Esteban Casa", "Calle Eterna", "11111111D", "esteban@c.com");
-        Cliente c2 = new ClientePremium(2L, "Elisa Techo", "Avenida Sol 45", "11111111A", "elisa@c.com");
-        Cliente c3 = new ClienteEstandar(3L, "Eduardo Mole", "Plaza Mayor 8", "11111111V", "eduardo@c.com");
-        addCliente(c1);
-        addCliente(c2);
-        addCliente(c3);
-
-        // Pedidos PENDIENTES
-        Pedido p1 = new Pedido(generarProximoPedido(), a1, 1, c1, LocalDateTime.now(), TipoEstado.PENDIENTE);
-        Pedido p2 = new Pedido(generarProximoPedido(), a2, 2, c2, LocalDateTime.now(), TipoEstado.PENDIENTE);
-        addPedido(p1);
-        addPedido(p2);
-
-        // Pedidos ENVIADOS
-        Pedido p3 = new Pedido(generarProximoPedido(), a3, 1, c3, LocalDateTime.now(), TipoEstado.PENDIENTE); // eduardo@.com
-        Pedido p4 = new Pedido(generarProximoPedido(), a1, 1, c2, LocalDateTime.now(), TipoEstado.PENDIENTE);
-
-        addPedido(p3);
-        addPedido(p4);
+    public String toString() {
+        return "Tienda OnLineStore de SQL Squad";
     }
-     */
 }

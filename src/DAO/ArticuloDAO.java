@@ -15,6 +15,17 @@ import java.util.Optional;
 
 public class ArticuloDAO implements IDao {
     Connection conexion = null;
+
+    // TODO Pendiente implementar
+    @Override
+    public Optional getById(String id) {
+        return Optional.ofNullable(null);
+
+        // TODO Se requiere que si no existe retorne Optional.ofNullable(null)
+
+    }
+
+
     @Override
     public Optional get(Object o) {
         if (o instanceof Articulo) {
