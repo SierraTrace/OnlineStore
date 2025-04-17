@@ -2,22 +2,25 @@
 
 
 package modelo.cliente;
-
+// TODO controlar tipo id
 public class Cliente {
-    private long id;
+    private Integer id;
     private String nombre;
     private String domicilio;
     private String nif;
     private String email;
 
-    public Cliente(long id, String nombre, String domicilio, String nif, String email) {
-        this.id =id;
+    public Cliente(Integer id, String nombre, String domicilio, String nif, String email) {
+        this.id = id;
         this.nombre = nombre;
         this.domicilio = domicilio;
         this.nif = nif;
         this.email = email;
     }
-    public long getId(){return id;}
+    public long getId(){
+        return id;
+    }
+
     public String getNombre() {
         return nombre;
     }
