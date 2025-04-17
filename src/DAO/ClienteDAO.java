@@ -16,13 +16,13 @@ public class ClienteDAO implements IDao<Cliente>{
     // Connection conexion = null;
 
     @Override
-    public Optional<Cliente> getById(String email) {
+    public Optional<Cliente> getById(String mail) {
 
         String sql = "SELECT * FROM cliente WHERE email = ?";
 
         try (Connection conexion = ConexionBD.getConexion()) {
             PreparedStatement stmt = conexion.prepareStatement(sql);
-            stmt.setString(1, email);
+            stmt.setString(1, mail);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
                 Integer id = rs.getInt("idCliente");
@@ -51,6 +51,45 @@ public class ClienteDAO implements IDao<Cliente>{
             System.err.println("Error al acceder a la BBDD con email: "+ email + " " + e.getMessage());
         }
         return Optional.empty()
+    }
+
+
+    @Override
+    public ArrayList getAll() {
+
+        String sql = "SELECT * FROM cliente";
+        ArrayList<Cliente> listaClientes = new ArrayList<>();
+
+        try (Connection conexion = ConexionBD.getConexion()) {
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Integer id = rs.getInt("idCliente");
+                String email = rs.getString("email");
+                String nif = rs.getString("nif");
+                String nombre = rs.getString("nombre");
+                String domicilio = rs.getString("domicilio");
+                TipoCliente tipoCliente = TipoCliente.valueOf(rs.getString("tipoCliente"));
+                Integer descuento = rs.getInt("descuento");
+                Float cuotaAnual = rs.getFloat("cuotaAnual");
+
+                if (tipoCliente == TipoCliente.PREMIUM ) {
+                    // Creamos un cliente de tipo Premium
+                    ClientePremium clientePremium = new ClientePremium(
+                            id, nombre, domicilio, nif, email, descuento, cuotaAnual);
+                    listaClientes.add(clientePremium);
+                }
+                if (tipoCliente == TipoCliente.ESTANDARD) {
+                    // Creamos un cliente de tipo Estandar
+                    ClienteEstandar clienteEstandar = new ClienteEstandar(
+                            id, nombre, domicilio, nif, email);
+                    listaClientes.add(clienteEstandar);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al acceder a la BBDD"+ e.getMessage());
+        }
+        return listaClientes;
     }
 
 
@@ -105,44 +144,6 @@ public class ClienteDAO implements IDao<Cliente>{
         return Optional.empty();
     }
 
-
-    @Override
-    public ArrayList getAll() {
-
-        ArrayList<Cliente> clientes = new ArrayList<>();
-        try {
-            //TODO sustituir por función conectar()
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-            String sql = "SELECT * FROM Cliente";
-            PreparedStatement sqlOriginal = conexion.prepareStatement(sql);//TODO aqui creo que no hace falta porque no hay que meter datos pero si lo quito no funciona.
-            ResultSet resultado = sqlOriginal.executeQuery();
-
-            while (resultado.next()) {
-                Cliente cliente = new Cliente(
-                        resultado.getLong("id_cliente"),
-                        resultado.getString("nombre"),
-                        resultado.getString("domicilio"),
-                        resultado.getString("nif"),
-                        resultado.getString("email")
-                );
-                clientes.add(cliente);//No estoy segura de si los tiene que guardar porque realmente ya están en la bbdd, maybe solo tiene que enseñarlos.
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                if (conexion != null && !conexion.isClosed()) {
-                    conexion.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return clientes;
-    }
 
     @Override
     public void save(Object o) {
