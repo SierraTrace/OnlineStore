@@ -143,22 +143,20 @@ public class Modelo {
     }
 
     public boolean eliminarPedido(Integer numeroPedido) {
-        // TODO pendiente modificar
-        if (pedidos == null) {
-            throw new IllegalStateException("Lista de pedidos no inicializada");
-        }
 
-        Iterator<Pedido> iterator = pedidos.iterator();
-        while (iterator.hasNext()) {
-            Pedido pedido = iterator.next();
-            if (pedido.getNumeroPedido().equals(numeroPedido)) {
-                pedido.actualizarEstadoPreparacion();
-                //Verificar si el estado permite eliminación
-                if (pedido.getEstado().equals(TipoEstado.PENDIENTE)) {
-                    iterator.remove(); // Elimina el pedido
-                    return true;
-                }
+        // Verifica si el estado es compatible para eliminar y elimina.
+        IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        Optional<Pedido> pedido = pedidoDAO.getById(numeroPedido.toString());
+
+        if (pedido.isPresent()) {
+            Pedido pedidoFinal = pedido.get(); // Se rescata el pedido dentro de Optional
+            pedidoFinal.actualizarEstadoPreparacion();
+            if (pedidoFinal.getEstado().equals(TipoEstado.PENDIENTE)) {
+                pedidoDAO.delete(pedidoFinal);
+                return true;
             }
+        } else {
+            throw new IllegalStateException("Pedido no encontrado");
         }
         return false;
     }
