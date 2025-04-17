@@ -62,18 +62,23 @@ public class ArticuloDAO implements IDao<Articulo> {
     }
 
     @Override
-    public void save(Articulo articulo) {
-        try (Connection conexion = ConexionBD.getConexion()) {
-            String sql = "INSERT INTO articulo (codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conexion.prepareStatement(sql);
-            stmt.setString(1, articulo.getCodigoArticulo());
-            stmt.setString(2, articulo.getDescripcion());
-            stmt.setFloat(3, articulo.getPrecioVenta());
-            stmt.setFloat(4, articulo.getGastosEnvio());
-            stmt.setInt(5, articulo.getTiempoPreparacion());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void save(Object o) {
+
+        if (o instanceof Articulo) {
+            Articulo articulo = (Articulo) o;
+
+            try (Connection conexion = ConexionBD.getConexion()) {
+                String sql = "INSERT INTO articulo (codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion) VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement stmt = conexion.prepareStatement(sql);
+                stmt.setString(1, articulo.getCodigoArticulo());
+                stmt.setString(2, articulo.getDescripcion());
+                stmt.setFloat(3, articulo.getPrecioVenta());
+                stmt.setFloat(4, articulo.getGastosEnvio());
+                stmt.setInt(5, articulo.getTiempoPreparacion());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
