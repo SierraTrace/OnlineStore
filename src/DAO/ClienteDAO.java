@@ -175,18 +175,16 @@ public class ClienteDAO implements IDao<Cliente> {
     // TODO DELETE Falta revisar e implementar con commit y rollback
     @Override
     public void delete(Cliente cliente) {
-        if (o instanceof Cliente) {
 
-            try (Connection conexion = ConexionBD.getConexion()) {
+        try (Connection conexion = ConexionBD.getConexion()) {
 
                 String sql = "DELETE FROM Cliente WHERE id_cliente = ?";
                 PreparedStatement sqlOriginal = conexion.prepareStatement(sql);
                 sqlOriginal.setLong(1, cliente.getId());
 
-            }
-            catch (Exception e) {
-                System.err.println("Error al acceder a la BBDD " + e.getMessage());
-            }
+        }
+        catch (Exception e) {
+            System.err.println("Error al acceder a la BBDD " + e.getMessage());
         }
     }
 }
