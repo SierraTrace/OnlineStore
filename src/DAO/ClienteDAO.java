@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 //import ConexionMySQL; TODO no consigo importar la clase ConexionMySQL
 
-public class ClienteDAO implements IDao<Cliente>{
+public class ClienteDAO implements IDao<Cliente> {
     // Connection conexion = null;
 
     @Override
@@ -24,7 +24,7 @@ public class ClienteDAO implements IDao<Cliente>{
             PreparedStatement stmt = conexion.prepareStatement(sql);
             stmt.setString(1, mail);
             ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 Integer id = rs.getInt("idCliente");
                 String email = rs.getString("email");
                 String nif = rs.getString("nif");
@@ -34,7 +34,7 @@ public class ClienteDAO implements IDao<Cliente>{
                 Integer descuento = rs.getInt("descuento");
                 Float cuotaAnual = rs.getFloat("cuotaAnual");
 
-                if (tipoCliente == TipoCliente.PREMIUM ) {
+                if (tipoCliente == TipoCliente.PREMIUM) {
                     // Creamos un cliente de tipo Premium
                     ClientePremium clientePremium = new ClientePremium(
                             id, nombre, domicilio, nif, email, descuento, cuotaAnual);
@@ -48,9 +48,9 @@ public class ClienteDAO implements IDao<Cliente>{
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error al acceder a la BBDD con email: "+ email + " " + e.getMessage());
+            System.err.println("Error al acceder a la BBDD con email: " + mail + " " + e.getMessage());
         }
-        return Optional.empty()
+        return Optional.empty();
     }
 
 
@@ -73,7 +73,7 @@ public class ClienteDAO implements IDao<Cliente>{
                 Integer descuento = rs.getInt("descuento");
                 Float cuotaAnual = rs.getFloat("cuotaAnual");
 
-                if (tipoCliente == TipoCliente.PREMIUM ) {
+                if (tipoCliente == TipoCliente.PREMIUM) {
                     // Creamos un cliente de tipo Premium
                     ClientePremium clientePremium = new ClientePremium(
                             id, nombre, domicilio, nif, email, descuento, cuotaAnual);
@@ -87,12 +87,71 @@ public class ClienteDAO implements IDao<Cliente>{
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error al acceder a la BBDD"+ e.getMessage());
+            System.err.println("Error al acceder a la BBDD" + e.getMessage());
         }
         return listaClientes;
     }
 
+    @Override
+    public void save(Object o) {
+        // TODO Trabajando...
+        String sql = "INSERT INTO cliente (email, nif, nombre, domicilio, tipoCliente, descuento, cuotaAnual) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
+        if (o instanceof ClientePremium) {
+            ClientePremium clientePremium = (ClientePremium) o;
+            try (Connection conexion = ConexionBD.getConexion()) {
+                conexion.setAutoCommit(false); // Deshabilitar autocommit en la BBDD
+
+                try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+                    stmt.setString(1, clientePremium.getEmail());
+                    stmt.setString(2, clientePremium.getNif());
+                    stmt.setString(3, clientePremium.getNombre());
+                    stmt.setString(4, clientePremium.getDomicilio());
+                    stmt.setString(5, clientePremium.getTipoCliente().toString());
+                    stmt.setFloat(6, clientePremium.getDescuento());
+                    stmt.setFloat(7, clientePremium.getCuotaAnual());
+                    stmt.executeUpdate();
+
+                    conexion.commit(); // Confirmar cambios en BBDD
+                } catch (SQLException e) {
+                    conexion.rollback();
+                    System.err.println("Aplicado rollback por error en BBDD, save cliente" + e.getMessage());
+                }
+            } catch (SQLException e) {
+                System.err.println("Error al acceder a la BBDD " + e.getMessage());
+            }
+        }
+        if (o instanceof ClienteEstandar) {
+            ClienteEstandar clienteEstandar = (ClienteEstandar) o;
+            try (Connection conexion = ConexionBD.getConexion()) {
+                conexion.setAutoCommit(false); // Deshabilitar autocommit en la BBDD
+
+                try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+                    stmt.setString(1, clienteEstandar.getEmail());
+                    stmt.setString(2, clienteEstandar.getNif());
+                    stmt.setString(3, clienteEstandar.getNombre());
+                    stmt.setString(4, clienteEstandar.getDomicilio());
+                    stmt.setString(5, clienteEstandar.getTipoCliente().toString());
+                    stmt.setInt(6, 0);          // Descuento 0 por defecto
+                    stmt.setFloat(7, 0.00F);    // CuotaAnual 0 por defecto
+                    stmt.executeUpdate();
+
+                    conexion.commit(); // Confirmar cambios en BBDD
+                } catch (SQLException e) {
+                    conexion.rollback();
+                    System.err.println("Aplicado rollback por error en BBDD, save cliente" + e.getMessage());
+                }
+            } catch (SQLException e) {
+                System.err.println("Error al acceder a la BBDD " + e.getMessage());
+            }
+        }
+    }
+} // Clase
+
+
+
+    /*
     // TODO Los Clientes los buscamos por EMAIL implementar getById(String id)
     @Override
     public Optional get(Object o) {
@@ -100,7 +159,7 @@ public class ClienteDAO implements IDao<Cliente>{
             Cliente cliente = (Cliente) o;
             Long id = cliente.getId();
 
-            // TODO verificar. Verificar el que?
+
             try {
                 //TODO sustituir por función conectar()
                 conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
@@ -143,45 +202,8 @@ public class ClienteDAO implements IDao<Cliente>{
 
         return Optional.empty();
     }
-
-
-    @Override
-    public void save(Object o) {
-        if (o instanceof Cliente) {
-            Cliente cliente = (Cliente) o;
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-                String sql = "INSERT INTO Cliente (nombre, domicilio, nif, email)" + //LA columna id es autogenerada, no hay que insertar nada.
-                             "VALUES (?, ?, ?, ?);";
-                PreparedStatement sqlOriginal = conexion.prepareStatement(sql);
-                sqlOriginal.setString(1, cliente.getNombre());
-                sqlOriginal.setString(2, cliente.getDomicilio());
-                sqlOriginal.setString(3, cliente.getNif());
-                sqlOriginal.setString(4, cliente.getEmail());
-
-                int filasAfectadas = sqlOriginal.executeUpdate();
-                System.out.println(filasAfectadas + " filas modificadas.");
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            System.out.println("El objeto no es del tipo Cliente");
-        }
-    }
-
+*/
+/*
     @Override
     public void update(Object o) {
         if (o instanceof Cliente) {
@@ -220,7 +242,8 @@ public class ClienteDAO implements IDao<Cliente>{
             System.out.println("El objeto no es del tipo Cliente");
         }
     }
-
+*/
+    /*
     @Override
     public void delete(Object o) {
         if (o instanceof Cliente) {
@@ -259,3 +282,4 @@ public class ClienteDAO implements IDao<Cliente>{
         }
     }
 }
+*/
