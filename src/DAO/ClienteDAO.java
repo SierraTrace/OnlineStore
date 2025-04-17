@@ -114,6 +114,8 @@ public class ClienteDAO implements IDao<Cliente> {
                     stmt.executeUpdate();
 
                     conexion.commit(); // Confirmar cambios en BBDD
+                    conexion.setAutoCommit(true);
+
                 } catch (SQLException e) {
                     conexion.rollback();
                     System.err.println("Aplicado rollback por error en BBDD, save cliente" + e.getMessage());
@@ -147,139 +149,44 @@ public class ClienteDAO implements IDao<Cliente> {
             }
         }
     }
-} // Clase
 
-
-
-    /*
-    // TODO Los Clientes los buscamos por EMAIL implementar getById(String id)
+    // TODO UPDATE Falta revisar e implementar con commit y rollback y teniendo en cuenta PREMIUM y ESTANDAR
     @Override
-    public Optional get(Object o) {
-        if (o instanceof Cliente) {
-            Cliente cliente = (Cliente) o;
-            Long id = cliente.getId();
+    public void update(Cliente cliente) {
 
+        try (Connection conexion = ConexionBD.getConexion()) {
 
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-                String sql = "SELECT * FROM Cliente WHERE nombre = ?";
-                PreparedStatement sqlOriginal = conexion.prepareStatement(sql);
-                sqlOriginal.setLong(1, id);
-
-                ResultSet resultado = sqlOriginal.executeQuery();
-
-                if (resultado.next()) {
-                    if(resultado.getLong("id_cliente") == id){
-                        cliente = new Cliente(
-                                resultado.getLong("id_cliente"),
-                                resultado.getString("nombre"),
-                                resultado.getString("domicilio"),
-                                resultado.getString("nif"),
-                                resultado.getString("email")
-                        );
-                        return Optional.ofNullable(cliente);  // Permite el retorno de null
-                    }
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            System.out.println("El objeto no es del tipo Cliente");
-        }
-
-        return Optional.empty();
-    }
-*/
-/*
-    @Override
-    public void update(Object o) {
-        if (o instanceof Cliente) {
-            Cliente cliente = (Cliente) o;
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-                String sql = "UPDATE Cliente" +
+            String sql = "UPDATE Cliente" +
                              "SET nombre = ?, domicilio = ?, nif = ?, email = ?" +
                              "WHERE id_cliente = ?";
-                PreparedStatement sqlOriginal = conexion.prepareStatement(sql);
-                sqlOriginal.setString(1, cliente.getNombre());//TODO Pedir datos al usuario?
-                sqlOriginal.setString(2, cliente.getDomicilio());
-                sqlOriginal.setString(3, cliente.getNif());
-                sqlOriginal.setString(4, cliente.getEmail());
-                sqlOriginal.setLong(5, cliente.getId());
+            PreparedStatement sqlOriginal = conexion.prepareStatement(sql);
+            sqlOriginal.setString(1, cliente.getNombre());
+            sqlOriginal.setString(2, cliente.getDomicilio());
+            sqlOriginal.setString(3, cliente.getNif());
+            sqlOriginal.setString(4, cliente.getEmail());
+            sqlOriginal.setLong(5, cliente.getId());
+            sqlOriginal.executeUpdate();
 
-
-                int resultado = sqlOriginal.executeUpdate();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            System.out.println("El objeto no es del tipo Cliente");
+        } catch (SQLException e) {
+            System.err.println("Error al acceder a la BBDD " + e.getMessage());
         }
     }
-*/
-    /*
-    @Override
-    public void delete(Object o) {
-        if (o instanceof Cliente) {
-            Cliente cliente = (Cliente) o;
-            long id = cliente.getId();
 
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
+    // TODO DELETE Falta revisar e implementar con commit y rollback
+    @Override
+    public void delete(Cliente cliente) {
+        if (o instanceof Cliente) {
+
+            try (Connection conexion = ConexionBD.getConexion()) {
 
                 String sql = "DELETE FROM Cliente WHERE id_cliente = ?";
                 PreparedStatement sqlOriginal = conexion.prepareStatement(sql);
-                sqlOriginal.setLong(1, id);
+                sqlOriginal.setLong(1, cliente.getId());
 
-                if (sqlOriginal.executeUpdate() > 0) {
-                    System.out.println("Cliente eliminado correctamente.");
-                } else {
-                    System.out.println("No se encontró ningún cliente con ese ID.");
-                }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("Error al acceder a la BBDD " + e.getMessage());
             }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            System.out.println("El objeto no es del tipo Cliente");
         }
     }
 }
-*/
