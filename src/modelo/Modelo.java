@@ -7,33 +7,11 @@ import DAO.FactoryDAO;
 import DAO.IDao;
 import modelo.cliente.Cliente;
 import modelo.enums.TipoEstado;
-import modelo.cliente.ClienteEstandar;
-import modelo.cliente.ClientePremium;
-import java.time.LocalDateTime;
 
 import java.util.*;
 
 
 public class Modelo {
-
-    // TODO Pendientes de borrado
-    // private HashMap<String, Cliente> clientes;
-    // private ArrayList<Articulo> articulos;
-    private ArrayList<Pedido> pedidos;
-    private Integer proximoPedido;
-
-
-    public Modelo() {
-        // clientes = new HashMap<>();
-        // articulos = new ArrayList<>();
-        // pedidos = new ArrayList<>();
-        proximoPedido = 0;
-    }
-
-    // TODO pendiente decidir si es necesario dado los ID de la BBDD
-    public Integer generarProximoPedido() {
-        return ++proximoPedido;
-    }
 
     //Añaden a listados
     public void addArticulo(Articulo articulo) {
