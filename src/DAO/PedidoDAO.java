@@ -47,10 +47,6 @@ public class PedidoDAO implements IDao<Pedido> {
         return Optional.empty();
     }
 
-    @Override
-    public Optional<Pedido> get(Pedido pedido) {
-        return getById(pedido.getNumeroPedido().toString());
-    }
 
     @Override
     public List<Pedido> getAll() {

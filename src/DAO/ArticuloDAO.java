@@ -33,10 +33,6 @@ public class ArticuloDAO implements IDao<Articulo> {
         return Optional.empty();
     }
 
-    @Override
-    public Optional<Articulo> get(Articulo articulo) {
-        return getById(articulo.getCodigoArticulo());
-    }
 
     @Override
     public List<Articulo> getAll() {
