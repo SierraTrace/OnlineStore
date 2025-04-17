@@ -2,10 +2,7 @@ package DAO;
 
 import modelo.cliente.Cliente;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
 //import ConexionMySQL; TODO no consigo importar la clase ConexionMySQL
@@ -16,9 +13,52 @@ public class ClienteDAO implements IDao {
 
     // TODO Pendiente implementar
     @Override
-    public Optional getById(String id) {
+    public Optional<Cliente> getById(String id) {
+        // TODO Trabajando...
+
+        String sql = "SELECT * FROM cliente WHERE email = ?";
+
+        try {
+
+
+        } catch (SQLException e) {
+            System.err.println("Error al acceder a la BBDD" + e.getMessage());
+        }
+
+
+
+
+
+
+
         return Optional.empty();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // TODO Los Clientes los buscamos por EMAIL implementar getById(String id)
     @Override
