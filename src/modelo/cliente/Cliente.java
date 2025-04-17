@@ -17,10 +17,15 @@ public class Cliente {
         this.nif = nif;
         this.email = email;
     }
-    public long getId(){
-        return id;
+
+    // Sobrecarga del constructor para gestión sin número de cliente. BBDD Asignará el Nº de cliente
+    public Cliente(String nombre, String domicilio, String nif, String email) {
+        this(null, nombre, domicilio, nif, email);
     }
 
+    public Integer getId(){
+        return id;
+    }
     public String getNombre() {
         return nombre;
     }

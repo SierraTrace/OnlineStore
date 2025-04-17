@@ -59,7 +59,7 @@ class PedidoTest{
     void testCalcularTotalConClientePremium() {
 
         // Cliente premium por con descuento del 20%
-        ClientePremium clientePremium = new ClientePremium(1L, "Maria", "Su casa", "11111111A", "maria@email.com");
+        ClientePremium clientePremium = new ClientePremium("Maria", "Su casa", "11111111A", "maria@email.com");
         clientePremium.setDescuento(20);
 
         // Articulo con valor 100, gastos 50
@@ -78,7 +78,7 @@ class PedidoTest{
     void testCalcularTotalconClienteEstandar() {
 
         // Cliente estandar
-        Cliente clienteEstandar = new ClienteEstandar(1L, "Maria", "Su casa", "11111111A", "maria@email.com");
+        Cliente clienteEstandar = new ClienteEstandar("Maria", "Su casa", "11111111A", "maria@email.com");
 
         // Articulo con valor 100, gastos 50
         Articulo articulo = new Articulo("A111", "Artículo de prueba", 100.0f, 50.0f, 20);
@@ -97,7 +97,7 @@ class PedidoTest{
         // Valores extremos: artículo con valores a 0.
 
         // Cliente estandar
-        Cliente clienteEstandar = new ClienteEstandar(1L, "Maria", "Su casa", "11111111A", "maria@email.com");
+        Cliente clienteEstandar = new ClienteEstandar("Maria", "Su casa", "11111111A", "maria@email.com");
 
         // Articulo con valor 0, gastos 0
         Articulo articulo = new Articulo("A111", "Artículo de prueba", 0.0f, 0.0f, 20);
