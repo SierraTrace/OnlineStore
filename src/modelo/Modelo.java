@@ -7,33 +7,11 @@ import DAO.FactoryDAO;
 import DAO.IDao;
 import modelo.cliente.Cliente;
 import modelo.enums.TipoEstado;
-import modelo.cliente.ClienteEstandar;
-import modelo.cliente.ClientePremium;
-import java.time.LocalDateTime;
 
 import java.util.*;
 
 
 public class Modelo {
-
-    // TODO Pendientes de borrado
-    // private HashMap<String, Cliente> clientes;
-    // private ArrayList<Articulo> articulos;
-    private ArrayList<Pedido> pedidos;
-    private Integer proximoPedido;
-
-
-    public Modelo() {
-        // clientes = new HashMap<>();
-        // articulos = new ArrayList<>();
-        pedidos = new ArrayList<>();
-        proximoPedido = 0;
-    }
-
-    // TODO pendiente decidir si es necesario dado los ID de la BBDD
-    public Integer generarProximoPedido() {
-        return ++proximoPedido;
-    }
 
     //Añaden a listados
     public void addArticulo(Articulo articulo) {
@@ -143,22 +121,20 @@ public class Modelo {
     }
 
     public boolean eliminarPedido(Integer numeroPedido) {
-        // TODO pendiente modificar
-        if (pedidos == null) {
-            throw new IllegalStateException("Lista de pedidos no inicializada");
-        }
 
-        Iterator<Pedido> iterator = pedidos.iterator();
-        while (iterator.hasNext()) {
-            Pedido pedido = iterator.next();
-            if (pedido.getNumeroPedido().equals(numeroPedido)) {
-                pedido.actualizarEstadoPreparacion();
-                //Verificar si el estado permite eliminación
-                if (pedido.getEstado().equals(TipoEstado.PENDIENTE)) {
-                    iterator.remove(); // Elimina el pedido
-                    return true;
-                }
+        // Verifica si el estado es compatible para eliminar y elimina.
+        IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        Optional<Pedido> pedido = pedidoDAO.getById(numeroPedido.toString());
+
+        if (pedido.isPresent()) {
+            Pedido pedidoFinal = pedido.get(); // Se rescata el pedido dentro de Optional
+            pedidoFinal.actualizarEstadoPreparacion();
+            if (pedidoFinal.getEstado().equals(TipoEstado.PENDIENTE)) {
+                pedidoDAO.delete(pedidoFinal);
+                return true;
             }
+        } else {
+            throw new IllegalStateException("Pedido no encontrado");
         }
         return false;
     }

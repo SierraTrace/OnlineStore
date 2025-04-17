@@ -8,7 +8,6 @@ import controlador.Controlador;
 public class Main {
     public static void main(String[] args) {
         Modelo modelo = new Modelo();
-        modelo.cargarDatosIniciales();
         Vista vista = new Vista();
         Controlador controlador = new Controlador(modelo, vista);
         vista.startVista(controlador);

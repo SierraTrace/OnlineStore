@@ -32,6 +32,12 @@ public class  Pedido {
         this.estado = estadoPedido; //TipoEstado.PENDIENTE;
     }
 
+    // Sobrecarga de constructor para gestión sin número de pedído. BBDD asignará el Nº de pedido
+    public Pedido(Articulo articulo, Integer cantidadArticulos,Cliente cliente,
+                  LocalDateTime fechaPedido, TipoEstado estadoPedido) {
+        this(null, articulo, cantidadArticulos, cliente, fechaPedido, estadoPedido);
+    }
+
     // Metodo con pruebas unitarias
     public double calcularTotal() {
         // Calcular gastos de envío
@@ -60,6 +66,7 @@ public class  Pedido {
                 return false;
             }
         }
+        return false;
     }
 
     public TipoEstado getEstado() {
