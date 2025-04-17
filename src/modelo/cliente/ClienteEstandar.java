@@ -9,7 +9,7 @@ public class ClienteEstandar extends Cliente {
 
     private final TipoCliente tipoCliente;
 
-    public ClienteEstandar(Long id, String nombre, String domicilio, String nif, String email) {
+    public ClienteEstandar(Integer id, String nombre, String domicilio, String nif, String email) {
         super(id, nombre, domicilio, nif, email);
         this.tipoCliente = TipoCliente.ESTANDARD;
     }

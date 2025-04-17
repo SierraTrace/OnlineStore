@@ -1,63 +1,57 @@
 package DAO;
 
 import modelo.cliente.Cliente;
+import modelo.cliente.ClienteEstandar;
+import modelo.cliente.ClientePremium;
+import modelo.enums.TipoCliente;
+import modelo.enums.TipoEstado;
+import util.ConexionBD;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
 //import ConexionMySQL; TODO no consigo importar la clase ConexionMySQL
 
-public class ClienteDAO implements IDao {
-    Connection conexion = null;
+public class ClienteDAO implements IDao<Cliente>{
+    // Connection conexion = null;
 
-
-    // TODO Pendiente implementar
     @Override
-    public Optional<Cliente> getById(String id) {
-        // TODO Trabajando...
+    public Optional<Cliente> getById(String email) {
 
         String sql = "SELECT * FROM cliente WHERE email = ?";
 
-        try {
+        try (Connection conexion = ConexionBD.getConexion()) {
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                Integer id = rs.getInt("idCliente");
+                String email = rs.getString("email");
+                String nif = rs.getString("nif");
+                String nombre = rs.getString("nombre");
+                String domicilio = rs.getString("domicilio");
+                TipoCliente tipoCliente = TipoCliente.valueOf(rs.getString("tipoCliente"));
+                Integer descuento = rs.getInt("descuento");
+                Float cuotaAnual = rs.getFloat("cuotaAnual");
 
-
+                if (tipoCliente == TipoCliente.PREMIUM ) {
+                    // Creamos un cliente de tipo Premium
+                    ClientePremium clientePremium = new ClientePremium(
+                            id, nombre, domicilio, nif, email, descuento, cuotaAnual);
+                    return Optional.of(clientePremium);
+                }
+                if (tipoCliente == TipoCliente.ESTANDARD) {
+                    // Creamos un cliente de tipo Estandar
+                    ClienteEstandar clienteEstandar = new ClienteEstandar(
+                            id, nombre, domicilio, nif, email);
+                    return Optional.of(clienteEstandar);
+                }
+            }
         } catch (SQLException e) {
-            System.err.println("Error al acceder a la BBDD" + e.getMessage());
+            System.err.println("Error al acceder a la BBDD con email: "+ email + " " + e.getMessage());
         }
-
-
-
-
-
-
-
-        return Optional.empty();
+        return Optional.empty()
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // TODO Los Clientes los buscamos por EMAIL implementar getById(String id)

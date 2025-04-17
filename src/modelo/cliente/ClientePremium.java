@@ -3,6 +3,7 @@
 
 package modelo.cliente;
 
+import modelo.Articulo;
 import modelo.enums.TipoCliente;
 
 public class ClientePremium extends Cliente {
@@ -15,6 +16,13 @@ public class ClientePremium extends Cliente {
         super(id, nombre, domicilio, nif, email);
         this.descuento = 20;
         this.cuotaAnual = 30.0f;
+        this.tipoCliente = TipoCliente.PREMIUM;
+    }
+
+    // TODO Revisar
+    public ClientePremium(Integer id, String nombre, String domicilio, String nif,
+                          String email, Integer descuento, Float cuotaAnual) {
+        super(id, nombre, domicilio, nif, email);
         this.tipoCliente = TipoCliente.PREMIUM;
     }
 
