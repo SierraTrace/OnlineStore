@@ -11,7 +11,7 @@ import java.util.Optional;
 public class ArticuloDAO implements IDao<Articulo> {
 
     @Override
-    public Optional getById(String codigo) {
+    public Optional<Articulo> getById(String codigo) {
         try (Connection conexion = ConexionBD.getConexion()) {
             String sql = "SELECT * FROM articulo WHERE codigoArticulo = ?";
             PreparedStatement stmt = conexion.prepareStatement(sql);
@@ -34,15 +34,12 @@ public class ArticuloDAO implements IDao<Articulo> {
     }
 
     @Override
-    public Optional get(Object o) {
-        if (o instanceof Articulo) {
-            return getById(((Articulo) o).getCodigoArticulo());
-        }
-        return Optional.empty();
+    public Optional<Articulo> get(Articulo articulo) {
+        return getById(articulo.getCodigoArticulo());
     }
 
     @Override
-    public List getAll() {
+    public List<Articulo> getAll() {
         List<Articulo> lista = new ArrayList<>();
         try (Connection conexion = ConexionBD.getConexion()) {
             String sql = "SELECT * FROM articulo";
@@ -65,52 +62,46 @@ public class ArticuloDAO implements IDao<Articulo> {
     }
 
     @Override
-    public void save(Object o) {
-        if (o instanceof Articulo articulo) {
-            try (Connection conexion = ConexionBD.getConexion()) {
-                String sql = "INSERT INTO articulo (codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion) VALUES (?, ?, ?, ?, ?)";
-                PreparedStatement stmt = conexion.prepareStatement(sql);
-                stmt.setString(1, articulo.getCodigoArticulo());
-                stmt.setString(2, articulo.getDescripcion());
-                stmt.setFloat(3, articulo.getPrecioVenta());
-                stmt.setFloat(4, articulo.getGastosEnvio());
-                stmt.setInt(5, articulo.getTiempoPreparacion());
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public void save(Articulo articulo) {
+        try (Connection conexion = ConexionBD.getConexion()) {
+            String sql = "INSERT INTO articulo (codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, articulo.getCodigoArticulo());
+            stmt.setString(2, articulo.getDescripcion());
+            stmt.setFloat(3, articulo.getPrecioVenta());
+            stmt.setFloat(4, articulo.getGastosEnvio());
+            stmt.setInt(5, articulo.getTiempoPreparacion());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void update(Object o) {
-        if (o instanceof Articulo articulo) {
-            try (Connection conexion = ConexionBD.getConexion()) {
-                String sql = "UPDATE articulo SET descripcion = ?, precioVenta = ?, gastosEnvio = ?, tiempoPreparacion = ? WHERE codigoArticulo = ?";
-                PreparedStatement stmt = conexion.prepareStatement(sql);
-                stmt.setString(1, articulo.getDescripcion());
-                stmt.setFloat(2, articulo.getPrecioVenta());
-                stmt.setFloat(3, articulo.getGastosEnvio());
-                stmt.setInt(4, articulo.getTiempoPreparacion());
-                stmt.setString(5, articulo.getCodigoArticulo());
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public void update(Articulo articulo) {
+        try (Connection conexion = ConexionBD.getConexion()) {
+            String sql = "UPDATE articulo SET descripcion = ?, precioVenta = ?, gastosEnvio = ?, tiempoPreparacion = ? WHERE codigoArticulo = ?";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, articulo.getDescripcion());
+            stmt.setFloat(2, articulo.getPrecioVenta());
+            stmt.setFloat(3, articulo.getGastosEnvio());
+            stmt.setInt(4, articulo.getTiempoPreparacion());
+            stmt.setString(5, articulo.getCodigoArticulo());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void delete(Object o) {
-        if (o instanceof Articulo articulo) {
-            try (Connection conexion = ConexionBD.getConexion()) {
-                String sql = "DELETE FROM articulo WHERE codigoArticulo = ?";
-                PreparedStatement stmt = conexion.prepareStatement(sql);
-                stmt.setString(1, articulo.getCodigoArticulo());
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public void delete(Articulo articulo) {
+        try (Connection conexion = ConexionBD.getConexion()) {
+            String sql = "DELETE FROM articulo WHERE codigoArticulo = ?";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, articulo.getCodigoArticulo());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
