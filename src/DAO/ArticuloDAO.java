@@ -1,235 +1,116 @@
 package DAO;
 
 import modelo.Articulo;
-import modelo.cliente.Cliente;
+import util.ConexionBD;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-// TODO, pendiente de revisar e implementar.
+public class ArticuloDAO implements IDao<Articulo> {
 
-public class ArticuloDAO implements IDao {
-    Connection conexion = null;
-
-    // TODO Pendiente implementar
     @Override
-    public Optional getById(String id) {
-        return Optional.ofNullable(null);
-
-        // TODO Se requiere que si no existe retorne Optional.ofNullable(null)
-
+    public Optional getById(String codigo) {
+        try (Connection conexion = ConexionBD.getConexion()) {
+            String sql = "SELECT * FROM articulo WHERE codigoArticulo = ?";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, codigo);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Articulo articulo = new Articulo(
+                        rs.getString("codigoArticulo"),
+                        rs.getString("descripcion"),
+                        rs.getFloat("precioVenta"),
+                        rs.getFloat("gastosEnvio"),
+                        rs.getInt("tiempoPreparacion")
+                );
+                return Optional.of(articulo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
-
 
     @Override
     public Optional get(Object o) {
         if (o instanceof Articulo) {
-            Articulo articulo = (Articulo) o;
-            String codigo_articulo = articulo.getCodigoArticulo();
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-                String sql = "SELECT * FROM Articulo WHERE codigo_articulo = ?";
-                PreparedStatement sqlOriginal = conexion.prepareStatement(sql);
-                sqlOriginal.setString(1, codigo_articulo);
-
-                ResultSet resultado = sqlOriginal.executeQuery();
-
-                if (resultado.next()) {
-                    if(resultado.getString("codigo_articulo") == codigo_articulo){
-                        articulo = new Articulo(
-                                resultado.getString("codigo_articulo"),
-                                resultado.getString("descripcion"),
-                                resultado.getFloat("precioVenta"),
-                                resultado.getFloat("gastosEnvio"),
-                                resultado.getInt("tiempoPreparación")
-                        );
-                        return Optional.of(articulo);
-                    }
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            System.out.println("El objeto no es del tipo Articulo");
+            return getById(((Articulo) o).getCodigoArticulo());
         }
         return Optional.empty();
     }
 
     @Override
     public List getAll() {
-        ArrayList<Articulo> articulos = new ArrayList<>();
-        try {
-            //TODO sustituir por función conectar()
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-            String sql = "SELECT * FROM Articulo";
-            PreparedStatement sqlOriginal = conexion.prepareStatement(sql);//TODO aqui creo que no hace falta porque no hay que meter datos pero si lo quito no funciona.
-            ResultSet resultado = sqlOriginal.executeQuery();
-
-            while (resultado.next()) {
+        List<Articulo> lista = new ArrayList<>();
+        try (Connection conexion = ConexionBD.getConexion()) {
+            String sql = "SELECT * FROM articulo";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
                 Articulo articulo = new Articulo(
-                        resultado.getString("codigo_articulo"),
-                        resultado.getString("descripcion"),
-                        resultado.getFloat("precioVenta"),
-                        resultado.getFloat("gastosEnvio"),
-                        resultado.getInt("tiempoPreparación")
+                        rs.getString("codigoArticulo"),
+                        rs.getString("descripcion"),
+                        rs.getFloat("precioVenta"),
+                        rs.getFloat("gastosEnvio"),
+                        rs.getInt("tiempoPreparacion")
                 );
-
-                articulos.add(articulo);//No estoy segura de si los tiene que guardar porque realmente ya están en la bbdd, maybe solo tiene que enseñarlos.
-                System.out.println(
-                        "Articulo Nº" + resultado.getString("codigo_articulo") +
-                                ". Descripcion: " + articulo.getDescripcion()
-                                + ". Precio de venta: " + articulo.getPrecioVenta()
-                                + ". Gastos de envio: " + articulo.getGastosEnvio()
-                                + ". Tiempo de preparacion: " + articulo.getTiempoPreparacion());
+                lista.add(articulo);
             }
-        }
-        catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally {
-            try {
-                if (conexion != null && !conexion.isClosed()) {
-                    conexion.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return articulos;
+        return lista;
     }
 
     @Override
     public void save(Object o) {
-        if (o instanceof Articulo) {
-            Articulo articulo = (Articulo) o;
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-                String sql = "INSERT INTO Articulo (codigo_articulo, descripcion, precioVenta, tiempoPreparacion)" + //LA columna id es autogenerada, no hay que insertar nada.
-                        "VALUES (?, ?, ?, ?);";
-                PreparedStatement sqlOriginal = conexion.prepareStatement(sql);
-                sqlOriginal.setString(1, articulo.getDescripcion());
-                sqlOriginal.setFloat(2, articulo.getPrecioVenta());
-                sqlOriginal.setFloat(3, articulo.getGastosEnvio());
-                sqlOriginal.setInt(4, articulo.getTiempoPreparacion());
-
-                // TODO Quitar trazas
-                int filasAfectadas = sqlOriginal.executeUpdate();
-                System.out.println(filasAfectadas + " filas modificadas.");
-            }
-            catch (Exception e) {
+        if (o instanceof Articulo articulo) {
+            try (Connection conexion = ConexionBD.getConexion()) {
+                String sql = "INSERT INTO articulo (codigoArticulo, descripcion, precioVenta, gastosEnvio, tiempoPreparacion) VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement stmt = conexion.prepareStatement(sql);
+                stmt.setString(1, articulo.getCodigoArticulo());
+                stmt.setString(2, articulo.getDescripcion());
+                stmt.setFloat(3, articulo.getPrecioVenta());
+                stmt.setFloat(4, articulo.getGastosEnvio());
+                stmt.setInt(5, articulo.getTiempoPreparacion());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        else {
-            System.out.println("El objeto no es del tipo Articulo");
-        }
-
     }
 
     @Override
     public void update(Object o) {
-        if (o instanceof Cliente) {
-            Articulo articulo = (Articulo) o;
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-                String sql = "UPDATE Articulo" +
-                        "SET descripcion = ?, precioVenta = ?, gastosEnvio = ?, tiempoPreparacion = ?" +
-                        "WHERE codigo_articulo = ?";
-                PreparedStatement sqlOriginal = conexion.prepareStatement(sql);
-                sqlOriginal.setString(1, articulo.getDescripcion());
-                sqlOriginal.setFloat(2, articulo.getPrecioVenta());
-                sqlOriginal.setFloat(3, articulo.getGastosEnvio());
-                sqlOriginal.setInt(4, articulo.getTiempoPreparacion());
-                sqlOriginal.setString(5, articulo.getCodigoArticulo());
-
-
-                int resultado = sqlOriginal.executeUpdate();
-            }
-            catch (Exception e) {
+        if (o instanceof Articulo articulo) {
+            try (Connection conexion = ConexionBD.getConexion()) {
+                String sql = "UPDATE articulo SET descripcion = ?, precioVenta = ?, gastosEnvio = ?, tiempoPreparacion = ? WHERE codigoArticulo = ?";
+                PreparedStatement stmt = conexion.prepareStatement(sql);
+                stmt.setString(1, articulo.getDescripcion());
+                stmt.setFloat(2, articulo.getPrecioVenta());
+                stmt.setFloat(3, articulo.getGastosEnvio());
+                stmt.setInt(4, articulo.getTiempoPreparacion());
+                stmt.setString(5, articulo.getCodigoArticulo());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            System.out.println("El objeto no es del tipo Articulo");
         }
     }
 
     @Override
     public void delete(Object o) {
-        if (o instanceof Articulo) {
-            Articulo articulo = (Articulo) o;
-            String codigo_articulo = articulo.getCodigoArticulo();
-
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-                String sql = "DELETE FROM Articulo WHERE codigo_articulo = ?";
-                PreparedStatement sqlOriginal = conexion.prepareStatement(sql);
-                sqlOriginal.setString(1, codigo_articulo);
-
-                if (sqlOriginal.executeUpdate() > 0) {
-                    System.out.println("Articulo eliminado correctamente.");
-                } else {
-                    System.out.println("No se encontró ningún articulo con ese codigo.");
-                }
-            }
-            catch (Exception e) {
+        if (o instanceof Articulo articulo) {
+            try (Connection conexion = ConexionBD.getConexion()) {
+                String sql = "DELETE FROM articulo WHERE codigoArticulo = ?";
+                PreparedStatement stmt = conexion.prepareStatement(sql);
+                stmt.setString(1, articulo.getCodigoArticulo());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            System.out.println("El objeto no es del tipo Articulo");
         }
     }
 }
