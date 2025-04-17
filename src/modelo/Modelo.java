@@ -121,24 +121,22 @@ public class Modelo {
     }
 
     public void actualizarPedidos() {
-        // TODO Trabajando...
 
         //Recuperamos todos los pedidos y solo actualizamos los que hayan cambiado de estado a enviado.
         // Obtener los pedidos
         IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
         Collection<Pedido> listaPedidos = pedidoDAO.getAll();
 
+        // Recorrer pedidos 1 a 1 y actualizar solo los que requieran cambio.
         if (listaPedidos != null) {
+            boolean control = false;
             for (Pedido pedido : listaPedidos) {
-                pedido.actualizarEstadoPreparacion();
+                control = pedido.actualizarEstadoPreparacion();
+                if (control) {
+                    pedidoDAO.update(pedido);
+                    control = false;
+                }
             }
-
-            // TODO Actualizar 1 a 1 o en bloque?
-
-
-
-
-
         } else {
             throw new IllegalStateException("Lista de pedidos vacía");
         }
