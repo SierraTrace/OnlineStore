@@ -121,12 +121,26 @@ public class Modelo {
     }
 
     public void actualizarPedidos() {
-        // TODO Pendiente modificar
-        if (pedidos == null) {
-            throw new IllegalStateException("Lista de pedidos no inicializada");
-        }
-        for (Pedido pedido : pedidos) {
-            pedido.actualizarEstadoPreparacion();
+        // TODO Trabajando...
+
+        //Recuperamos todos los pedidos y solo actualizamos los que hayan cambiado de estado a enviado.
+        // Obtener los pedidos
+        IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
+        Collection<Pedido> listaPedidos = pedidoDAO.getAll();
+
+        if (listaPedidos != null) {
+            for (Pedido pedido : listaPedidos) {
+                pedido.actualizarEstadoPreparacion();
+            }
+
+            // TODO Actualizar 1 a 1 o en bloque?
+
+
+
+
+
+        } else {
+            throw new IllegalStateException("Lista de pedidos vacía");
         }
     }
 

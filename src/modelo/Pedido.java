@@ -47,7 +47,7 @@ public class  Pedido {
     }
 
     // Metodo con pruebas unitarias
-    public void actualizarEstadoPreparacion() {
+    public boolean actualizarEstadoPreparacion() {
         if (estado == TipoEstado.PENDIENTE) {
             // Calcular el tiempo transcurrido
             long tiempoTranscurrido = Duration.between(fechaPedido, LocalDateTime.now()).toMinutes();
@@ -55,6 +55,9 @@ public class  Pedido {
             // Actualizar estado se ha cumplido el tiempo de preparación
             if (tiempoTranscurrido >= articulo.getTiempoPreparacion()) {
                 estado = TipoEstado.ENVIADO;
+                return true;
+            } else {
+                return false;
             }
         }
     }
