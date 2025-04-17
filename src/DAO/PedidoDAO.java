@@ -4,314 +4,130 @@ import modelo.Articulo;
 import modelo.Pedido;
 import modelo.cliente.Cliente;
 import modelo.enums.TipoEstado;
+import util.ConexionBD;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.sql.Timestamp;
 
+public class PedidoDAO implements IDao<Pedido> {
 
-public class PedidoDAO implements IDao {
-    Connection conexion = null;
-
-    // TODO Pendiente implementar
-    @Override
-    public Optional getById(String id) {
-        return Optional.empty();
-    }
-
+    private final ArticuloDAO articuloDAO = new ArticuloDAO();
+    private final ClienteDAO clienteDAO = new ClienteDAO();
 
     @Override
-    public Optional get(Object o) {
-        if (o instanceof Pedido) {
-            Pedido pedido = (Pedido) o;
-            int numeroPedido = pedido.getNumeroPedido();
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
+    public Optional<Pedido> getById(String id) {
+        try (Connection conexion = ConexionBD.getConexion()) {
+            String sql = "SELECT * FROM pedido WHERE numeroPedido = ?";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(id));
+            ResultSet rs = stmt.executeQuery();
 
-                String sqlPedido = "SELECT * FROM Pedido WHERE numeroPedido = ?";
-                PreparedStatement sqlPedidoPreparada = conexion.prepareStatement(sqlPedido);
-                sqlPedidoPreparada.setInt(1, numeroPedido);
+            if (rs.next()) {
+                Articulo articulo = articuloDAO.getById(rs.getString("codigoArticulo")).orElse(null);
+                Cliente cliente = (Cliente) clienteDAO.getById(rs.getString("emailCliente")).orElse(null);
 
-                ResultSet resultadoPedido = sqlPedidoPreparada.executeQuery();
-
-                if (resultadoPedido.next()) {
-                    if(resultadoPedido.getInt("numeroPedido") == numeroPedido){
-
-                        String sqlArticulo = "SELECT * FROM Articulo WHERE codigo_articulo = ?"; //Nueva consulta sql que busca el artículo correspondiente al pedido indicado.
-                        PreparedStatement sqlArticuloPreparada = conexion.prepareStatement(sqlArticulo);
-                        sqlArticuloPreparada.setString(1, resultadoPedido.getString("codigo_articulo"));
-
-                        ResultSet resutadoArticulo = sqlArticuloPreparada.executeQuery();
-                        Articulo articulo = new Articulo(
-                                resutadoArticulo.getString("codigo_articulo"),
-                                resutadoArticulo.getString("descripcion"),
-                                resutadoArticulo.getFloat("precioVenta"),
-                                resutadoArticulo.getFloat("gastosEnvio"),
-                                resutadoArticulo.getInt("tiempoPreparacion")
-                        );
-
-                        String sqlCliente = "SELECT * FROM Cliente WHERE id = ?"; //Nueva consulta sql que busca el cliente correspondiente al pedido indicado.
-                        PreparedStatement sqlClientePreparada = conexion.prepareStatement(sqlCliente);
-                        sqlClientePreparada.setString(1, resultadoPedido.getString("id"));
-
-                        ResultSet resultadoCliente = sqlClientePreparada.executeQuery();
-
-                        String estado = resultadoPedido.getString("estado");
-                        TipoEstado estadoPedido = TipoEstado.valueOf(estado.toUpperCase());
-
-                        Cliente cliente = new Cliente(
-                                resultadoCliente.getInt("id_cliente"),
-                                resultadoCliente.getString("nombre"),
-                                resultadoCliente.getString("domicilio"),
-                                resultadoCliente.getString("nif"),
-                                resultadoCliente.getString("email")
-                        );
-
-                        LocalDateTime fechaPedido = resultadoPedido.getObject("fechaPedido", LocalDateTime.class);//Guada en una variable tipo LocalCateTime el contenido tipo DateTime de la bbdd.
-
-                        pedido = new Pedido(
-                                resultadoPedido.getInt("numeroPedido"),
-                                articulo,
-                                resultadoPedido.getInt("cantidadArticulos"),
-                                cliente,
-                                fechaPedido,
-                                estadoPedido
-                        );
-                        return Optional.of(pedido);
-                    }
+                if (articulo != null && cliente != null) {
+                    Pedido pedido = new Pedido(
+                            rs.getInt("numeroPedido"),
+                            articulo,
+                            rs.getInt("cantidadArticulos"),
+                            cliente,
+                            rs.getTimestamp("fechaPedido").toLocalDateTime(),
+                            TipoEstado.valueOf(rs.getString("estado"))
+                    );
+                    return Optional.of(pedido);
                 }
             }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            System.out.println("El objeto no es del tipo Pedido");
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public ArrayList getAll() {
-
-        ArrayList<Pedido> pedidos = new ArrayList<>();
-        try {
-            //TODO sustituir por función conectar()
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-            //ConsultaSQL para seleccionar todos los pedidos
-            String sqlPedido = "SELECT * FROM Pedido";
-            PreparedStatement sqlPedidoPreparada = conexion.prepareStatement(sqlPedido);
-            ResultSet resultadoPedido = sqlPedidoPreparada.executeQuery();
-
-            while (resultadoPedido.next()) {
-
-                //Consulta SQL para seleccionar el artículo del pedido actual.
-
-                String sqlArticulo = "SELECT * FROM Articulo WHERE codigo_articulo = ?";
-                PreparedStatement sqlArticuloPreparada = conexion.prepareStatement(sqlArticulo);
-                sqlArticuloPreparada.setString(1, resultadoPedido.getString("codigo_articulo"));
-                ResultSet resutadoArticulo = sqlArticuloPreparada.executeQuery();
-                Articulo articulo = new Articulo(
-                        resutadoArticulo.getString("codigo_articulo"),
-                        resutadoArticulo.getString("descripcion"),
-                        resutadoArticulo.getFloat("precioVenta"),
-                        resutadoArticulo.getFloat("gastosEnvio"),
-                        resutadoArticulo.getInt("tiempoPreparacion")
-                );
-
-
-                //Consulta SQL para seleccionar el cliente del pedido actual.
-
-                String sqlCliente = "SELECT * FROM Cliente WHERE id = ?"; //Nueva consulta sql que busca el cliente correspondiente al pedido indicado.
-                PreparedStatement sqlClientePreparada = conexion.prepareStatement(sqlCliente);
-                sqlClientePreparada.setString(1, resultadoPedido.getString("id"));
-                ResultSet resultadoCliente = sqlClientePreparada.executeQuery();
-                //Lee el estado de la bbdd, lo guarda en un String y lo combiente a TipoEstado
-                String estado = resultadoPedido.getString("estado");
-                TipoEstado estadoPedido = TipoEstado.valueOf(estado.toUpperCase());
-                Cliente cliente = new Cliente(
-                        resultadoCliente.getInt("id_cliente"),
-                        resultadoCliente.getString("nombre"),
-                        resultadoCliente.getString("domicilio"),
-                        resultadoCliente.getString("nif"),
-                        resultadoCliente.getString("email")
-                );
-
-                LocalDateTime fechaPedido = resultadoPedido.getObject("fechaPedido", LocalDateTime.class);//Guada en una variable tipo LocalCateTime el contenido tipo DateTime de la bbdd.
-
-                Pedido pedido = new Pedido(
-                        resultadoPedido.getInt("numeroPedido"),
-                        articulo,
-                        resultadoPedido.getInt("cantidadArticulos"),
-                        cliente,
-                        fechaPedido,
-                        estadoPedido
-                );
-                pedidos.add(pedido);
-            }
-            return pedidos;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        finally {
-            try {
-                if (conexion != null && !conexion.isClosed()) {
-                    conexion.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return pedidos;
+        return Optional.empty();
     }
 
     @Override
-    public void save(Object o) {
-        if (o instanceof Pedido) {
-            Pedido pedido = (Pedido) o;
+    public Optional<Pedido> get(Pedido pedido) {
+        return getById(pedido.getNumeroPedido().toString());
+    }
 
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
+    @Override
+    public List<Pedido> getAll() {
+        List<Pedido> lista = new ArrayList<>();
+        try (Connection conexion = ConexionBD.getConexion()) {
+            String sql = "SELECT * FROM pedido";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
 
-                //Tengo que acceder al atributo codigoArticulo del artticulo de pedido
+            while (rs.next()) {
+                Articulo articulo = articuloDAO.getById(rs.getString("codigoArticulo")).orElse(null);
+                Cliente cliente = (Cliente) clienteDAO.getById(rs.getString("emailCliente")).orElse(null);
 
-                //Consulta SQL para seleccionar el artículo del pedido actual.
-
-
-                String sqlPedido = "INSERT INTO Pedido (numeroPedido, codigo_articulo, cantidadArticulos, id_cliente, precioTotal, fechaPedido, estado)" + //LA columna id es autogenerada, no hay que insertar nada.
-                        "VALUES (?, ?, ?, ?, ?, ?, ?);";
-
-                PreparedStatement sqlPedidoPreparada = conexion.prepareStatement(sqlPedido);
-                sqlPedidoPreparada.setInt(1, pedido.getNumeroPedido());
-                sqlPedidoPreparada.setString(2, pedido.getArticulo().getCodigoArticulo());
-                sqlPedidoPreparada.setInt(3,pedido.getCantidadArticulos());
-                sqlPedidoPreparada.setLong(4, pedido.getCliente().getId());
-                sqlPedidoPreparada.setDouble(5, pedido.getPrecioTotal());
-                sqlPedidoPreparada.setTimestamp(6, Timestamp.valueOf(pedido.getFechaPedido()));
-                sqlPedidoPreparada.setString(7, pedido.getEstado().name());
-
-                int filasAfectadas = sqlPedidoPreparada.executeUpdate();
-                System.out.println(filasAfectadas + " filas guardadas.");
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (articulo != null && cliente != null) {
+                    Pedido pedido = new Pedido(
+                            rs.getInt("numeroPedido"),
+                            articulo,
+                            rs.getInt("cantidadArticulos"),
+                            cliente,
+                            rs.getTimestamp("fechaPedido").toLocalDateTime(),
+                            TipoEstado.valueOf(rs.getString("estado"))
+                    );
+                    lista.add(pedido);
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        else {
-            System.out.println("El objeto no es del tipo Cliente");
+        return lista;
+    }
+
+    @Override
+    public void save(Pedido pedido) {
+        try (Connection conexion = ConexionBD.getConexion()) {
+            String sql = "INSERT INTO pedido (codigoArticulo, emailCliente, cantidadArticulos, precioTotal, fechaPedido, estado) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, pedido.getArticulo().getCodigoArticulo());
+            stmt.setString(2, pedido.getCliente().getEmail());
+            stmt.setInt(3, pedido.getCantidadArticulos());
+            stmt.setDouble(4, pedido.getPrecioTotal());
+            stmt.setTimestamp(5, Timestamp.valueOf(pedido.getFechaPedido()));
+            stmt.setString(6, pedido.getEstado().name());
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void update(Object o) {
-
-        // TODO Solo deberíamos actualizar el estado o todos los datos?
-        // TODO Implementar commit y rolback
-
-
-        if (o instanceof Cliente) {
-            Pedido pedido = (Pedido) o;
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-                String sql = "UPDATE Pedido" +
-                        "SET numeroPedido = ?, codigo_articulo = ?, cantidadArticulos = ?, id_cliente = ?, precioTotal = ?, fechaPedido = ?, estadp = ?" +
-                        "WHERE id_cliente = ?";
-                PreparedStatement sqlPedidoPreparada = conexion.prepareStatement(sql);
-                sqlPedidoPreparada.setInt(1, pedido.getNumeroPedido());
-                sqlPedidoPreparada.setString(2, pedido.getArticulo().getCodigoArticulo());
-                sqlPedidoPreparada.setInt(3,pedido.getCantidadArticulos());
-                sqlPedidoPreparada.setLong(4, pedido.getCliente().getId());
-                sqlPedidoPreparada.setDouble(5, pedido.getPrecioTotal());
-                sqlPedidoPreparada.setTimestamp(6, Timestamp.valueOf(pedido.getFechaPedido()));
-                sqlPedidoPreparada.setString(7, pedido.getEstado().name());
-
-                int filasActualizadas = sqlPedidoPreparada.executeUpdate();
-                System.out.println(filasActualizadas + " filas actualizadas.");
-
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+    public void update(Pedido pedido) {
+        try (Connection conexion = ConexionBD.getConexion()) {
+            String sql = "UPDATE pedido SET codigoArticulo = ?, emailCliente = ?, cantidadArticulos = ?, precioTotal = ?, fechaPedido = ?, estado = ? " +
+                    "WHERE numeroPedido = ?";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, pedido.getArticulo().getCodigoArticulo());
+            stmt.setString(2, pedido.getCliente().getEmail());
+            stmt.setInt(3, pedido.getCantidadArticulos());
+            stmt.setDouble(4, pedido.getPrecioTotal());
+            stmt.setTimestamp(5, Timestamp.valueOf(pedido.getFechaPedido()));
+            stmt.setString(6, pedido.getEstado().name());
+            stmt.setInt(7, pedido.getNumeroPedido());
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        else {
-            System.out.println("El objeto no es del tipo Cliente");
-        }
-
     }
 
     @Override
-    public void delete(Object o) {
-        if (o instanceof Cliente) {
-            Pedido pedido = (Pedido) o;
-            int numeroPedido = pedido.getNumeroPedido();
-
-            try {
-                //TODO sustituir por función conectar()
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Producto3", "root", "contrasena");
-
-                String sqlPedido = "DELETE FROM Pedido WHERE numeroPedido = ?";
-                PreparedStatement sqlPedidoPreparada = conexion.prepareStatement(sqlPedido);
-                sqlPedidoPreparada.setLong(1, numeroPedido);
-
-                if (sqlPedidoPreparada.executeUpdate() > 0) {
-                    System.out.println("Cliente eliminado correctamente.");
-                } else {
-                    System.out.println("No se encontró ningún cliente con ese ID.");
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    if (conexion != null && !conexion.isClosed()) {
-                        conexion.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            System.out.println("El objeto no es del tipo Pedido");
+    public void delete(Pedido pedido) {
+        try (Connection conexion = ConexionBD.getConexion()) {
+            String sql = "DELETE FROM pedido WHERE numeroPedido = ?";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setInt(1, pedido.getNumeroPedido());
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
