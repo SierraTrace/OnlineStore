@@ -127,18 +127,20 @@ public class ClienteDAO implements IDao<Cliente> {
             ClienteEstandar clienteEstandar = (ClienteEstandar) o;
             try (Connection conexion = ConexionBD.getConexion()) {
                 conexion.setAutoCommit(false); // Deshabilitar autocommit en la BBDD
-
+                // TODO Revisando error creación clienteEstandar
                 try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
                     stmt.setString(1, clienteEstandar.getEmail());
                     stmt.setString(2, clienteEstandar.getNif());
                     stmt.setString(3, clienteEstandar.getNombre());
                     stmt.setString(4, clienteEstandar.getDomicilio());
                     stmt.setString(5, clienteEstandar.getTipoCliente().toString());
-                    stmt.setInt(6, 0);          // Descuento 0 por defecto
+                    stmt.setFloat(6, 0.00F);          // Descuento 0 por defecto
                     stmt.setFloat(7, 0.00F);    // CuotaAnual 0 por defecto
                     stmt.executeUpdate();
 
                     conexion.commit(); // Confirmar cambios en BBDD
+                    conexion.setAutoCommit(true);
+
                 } catch (SQLException e) {
                     conexion.rollback();
                     System.err.println("Aplicado rollback por error en BBDD, save cliente" + e.getMessage());
