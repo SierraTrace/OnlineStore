@@ -24,6 +24,8 @@ public class ClientePremium extends Cliente {
     public ClientePremium(Integer id, String nombre, String domicilio, String nif,
                           String email, Integer descuento, Float cuotaAnual) {
         super(id, nombre, domicilio, nif, email);
+        this.descuento = descuento;
+        this.cuotaAnual = cuotaAnual;
         this.tipoCliente = TipoCliente.PREMIUM;
     }
 
