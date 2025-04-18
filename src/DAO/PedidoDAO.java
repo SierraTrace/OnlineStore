@@ -14,8 +14,8 @@ import java.util.Optional;
 
 public class PedidoDAO implements IDao<Pedido> {
 
-    private final ArticuloDAO articuloDAO = new ArticuloDAO();
-    private final ClienteDAO clienteDAO = new ClienteDAO();
+    private final IDao<Articulo> articuloDAO = FactoryDAO.getIDAO("ARTICULO");
+    private final IDao<Cliente> clienteDAO = FactoryDAO.getIDAO("CLIENTE");
 
     @Override
     public Optional<Pedido> getById(String id) {
