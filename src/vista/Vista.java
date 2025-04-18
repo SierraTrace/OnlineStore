@@ -159,16 +159,6 @@ public class Vista {
         String nif;
         int tipoCliente; //(1) Premium (2) Estandar
 
-        // TODO Eliminar. La vista no recoge los ID
-        /*
-        // Se valida que el id sea numérico y positivo
-        id = leerLong("Introduzca el id del cliente: ");
-        if (id < 0) {
-            System.out.println("Error: el id debe ser un número positivo. Se asignará un valor por defecto de 0.");
-            id = 0L;
-        }
-         */
-
         // Se leen las cadenas y se valida que no estén vacías
         nombre = leerCadena("Introduzca el nombre del cliente: ");
         domicilio = leerCadena("Introduzca el domicilio del cliente: ");
@@ -287,11 +277,11 @@ public class Vista {
                     "Si quieres filtrar por cliente escribe el correo electrónico,\n" +
                             "si quieres ver todos los pedidos enviados escribe T: "
             );
-            if (opcion.equals("T") || validarEmail(opcion)) {
+            if (opcion.equalsIgnoreCase("T") || validarEmail(opcion)) {
                 break;  // entrada válida
             }
             System.out.println(
-                    "Error: la entrada no es válida. Ha de ser 'T' (mayúscula)\n" +
+                    "Error: la entrada no es válida. Ha de ser 'T'\n" +
                             "o un correo electrónico válido. Inténtalo de nuevo."
             );
         } while (true);
