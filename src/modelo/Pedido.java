@@ -140,7 +140,8 @@ public class  Pedido {
         sb.append("\tFecha: " + fechaConFormato + "\n");
         sb.append("\tHora: " + horaConFormato + "\n");
         sb.append("\tCliente: " + cliente.getNombre() + "\n");
-        sb.append("\tArticulo: " + articulo.getDescripcion() + "\n");
+        sb.append("\tCodigo: " + articulo.getCodigoArticulo() + "\n");
+        sb.append("\tDescripción: " + articulo.getDescripcion() + "\n");
         sb.append("\tCantidad: " + cantidadArticulos + "\n");
         sb.append("\tPrecio: ");
         sb.append(String.format("%.2f", precioTotal));
