@@ -280,15 +280,21 @@ public class Vista {
         }
         controlador.mostrarPedidosPendientes(opcion);
     }
-
     private void mostrarPedidosEnviados() {
         String opcion;
-        opcion = leerCadena("Si quieres filtrar por cliente escriba el correo electronico, si quiere ver todos los pedidos enviados escriba T: ");
-        // Se valida que la opción ingresada sea 'T' o un email válido
-        if (!opcion.equalsIgnoreCase("T") && !validarEmail(opcion)) {
-            System.out.println("Error: la entrada no es válida. Ha de ser 'T' o un correo electrónico válido. Se mostrarán todos los pedidos enviados.");
-            opcion = "T";
-        }
+        do {
+            opcion = leerCadena(
+                    "Si quieres filtrar por cliente escribe el correo electrónico,\n" +
+                            "si quieres ver todos los pedidos enviados escribe T: "
+            );
+            if (opcion.equals("T") || validarEmail(opcion)) {
+                break;  // entrada válida
+            }
+            System.out.println(
+                    "Error: la entrada no es válida. Ha de ser 'T' (mayúscula)\n" +
+                            "o un correo electrónico válido. Inténtalo de nuevo."
+            );
+        } while (true);
         controlador.mostrarPedidosEnviados(opcion);
     }
 
