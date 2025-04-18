@@ -10,9 +10,9 @@ public class ConexionBD {
 
     private static final String URL = "jdbc:mysql://localhost:3306/onlinestore?useSSL=false&serverTimezone=UTC";
     private static final String USUARIO = "root";
-    private static final String PASSWORD = "0000";
+    private static final String PASSWORD = "password";
 
-    // Método para obtener una conexión
+    // Metodo para obtener una conexión
     public static Connection getConexion() throws SQLException {
         try {
             // Carga el driver JDBC de MySQL en memoria.

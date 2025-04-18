@@ -31,19 +31,16 @@ public class Modelo {
 
     //Getters individuales
     public Cliente getCliente(String email) {
-        // TODO Pendiente implementar getById(String id) en CLienteDAO
         IDao<Cliente> clienteDAO = FactoryDAO.getIDAO("CLIENTE");
         return clienteDAO.getById(email).orElse(null);
     }
 
     public Pedido getPedido(Integer numeroPedido) {
-        // TODO Pendiente implementar getById(String id) en PedidoDAO
         IDao<Pedido> pedidoDAO = FactoryDAO.getIDAO("PEDIDO");
         return pedidoDAO.getById(numeroPedido.toString()).orElse(null);
     }
 
     public Articulo getArticulo(String codigoArticulo) {
-        // TODO Pendiente implementar getById(String id) en ArticuloDAO
         IDao<Articulo> articuloDAO = FactoryDAO.getIDAO("ARTICULO");
         return articuloDAO.getById(codigoArticulo).orElse(null);
     }

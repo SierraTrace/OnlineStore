@@ -12,14 +12,15 @@ public class ClientePremium extends Cliente {
     private Float cuotaAnual;
     private final TipoCliente tipoCliente;
 
-    public ClientePremium(Long id, String nombre, String domicilio, String nif, String email) {
-        super(id, nombre, domicilio, nif, email);
+    // Constructor para la vista sin ID asignado
+    public ClientePremium(String nombre, String domicilio, String nif, String email) {
+        super(null, nombre, domicilio, nif, email);
         this.descuento = 20;
         this.cuotaAnual = 30.0f;
         this.tipoCliente = TipoCliente.PREMIUM;
     }
 
-    // TODO Revisar
+    // Constructor para gestión con ID de la BBDD
     public ClientePremium(Integer id, String nombre, String domicilio, String nif,
                           String email, Integer descuento, Float cuotaAnual) {
         super(id, nombre, domicilio, nif, email);

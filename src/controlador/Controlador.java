@@ -62,13 +62,14 @@ public class Controlador {
     ///////////////////////Gestión de Clientes//////////////////////////
     /// Permite añadir un cliente al modelo y actualiza la vista para
     /// Indicar que se ha creado.
-    public void addCliente(Long id, String nombre, String domicilio, String nif, String email, Integer tipoCliente) {
+
+    public void addCliente(String nombre, String domicilio, String nif, String email, Integer tipoCliente) {
         if (tipoCliente==1){
-            ClientePremium cliente = new ClientePremium(id, nombre, domicilio, nif, email);
+            ClientePremium cliente = new ClientePremium(nombre, domicilio, nif, email);
             modeloTienda.addCliente(cliente);
             vistaTienda.updateView("Se ha creado un cliente Premium ");
         } else{
-            ClienteEstandar cliente = new ClienteEstandar(id, nombre, domicilio, nif, email);
+            ClienteEstandar cliente = new ClienteEstandar(nombre, domicilio, nif, email);
             modeloTienda.addCliente(cliente);
             vistaTienda.updateView("Se ha creado un cliente Estandar ");
         }
