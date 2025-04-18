@@ -139,7 +139,7 @@ public class  Pedido {
         sb.append("\tNª Pedido: " + numeroPedido + "\n");
         sb.append("\tFecha: " + fechaConFormato + "\n");
         sb.append("\tHora: " + horaConFormato + "\n");
-        sb.append("\tCliente.Cliente: " + cliente.getNombre() + "\n");
+        sb.append("\tCliente: " + cliente.getNombre() + "\n");
         sb.append("\tArticulo: " + articulo.getDescripcion() + "\n");
         sb.append("\tCantidad: " + cantidadArticulos + "\n");
         sb.append("\tPrecio: ");

@@ -126,7 +126,7 @@ public class ClienteDAO implements IDao<Cliente> {
             ClienteEstandar clienteEstandar = (ClienteEstandar) o;
             try (Connection conexion = ConexionBD.getConexion()) {
                 conexion.setAutoCommit(false); // Deshabilitar autocommit en la BBDD
-                // TODO Revisando error creación clienteEstandar
+
                 try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
                     stmt.setString(1, clienteEstandar.getEmail());
                     stmt.setString(2, clienteEstandar.getNif());
