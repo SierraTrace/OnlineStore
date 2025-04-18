@@ -10,7 +10,6 @@ import util.ConexionBD;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
-//import ConexionMySQL; TODO no consigo importar la clase ConexionMySQL
 
 public class ClienteDAO implements IDao<Cliente> {
     // Connection conexion = null;

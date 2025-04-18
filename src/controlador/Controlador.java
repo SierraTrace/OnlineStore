@@ -63,7 +63,6 @@ public class Controlador {
     /// Permite añadir un cliente al modelo y actualiza la vista para
     /// Indicar que se ha creado.
 
-    // TODO Controlar el error
     public void addCliente(String nombre, String domicilio, String nif, String email, Integer tipoCliente) {
         if (tipoCliente==1){
             ClientePremium cliente = new ClientePremium(nombre, domicilio, nif, email);

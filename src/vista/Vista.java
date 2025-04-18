@@ -18,7 +18,7 @@ public class Vista {
         menuPrincipal();
     }
 
-    // Método genérico para mostrar por consola
+    // Metodo genérico para mostrar por consola
     public void updateView(String string) {
         System.out.println(string);
     }
@@ -66,7 +66,7 @@ public class Vista {
         } while (opcion != 0);
     }
 
-    // E es el tipo genérico de la lista, los objetos de la lista deben tener método toString().
+    // E es el tipo genérico de la lista, los objetos de la lista deben tener metodo toString().
     // Pide al controlador actualizar la vista con la lista de artículos
     private void mostrarArticulos() {
         controlador.mostrarArticulos();
@@ -159,7 +159,7 @@ public class Vista {
         String nif;
         int tipoCliente; //(1) Premium (2) Estandar
 
-        // TODO Eliminar de la vista no recoge los ID
+        // TODO Eliminar. La vista no recoge los ID
         /*
         // Se valida que el id sea numérico y positivo
         id = leerLong("Introduzca el id del cliente: ");
