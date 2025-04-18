@@ -4,7 +4,6 @@ import modelo.cliente.Cliente;
 import modelo.cliente.ClienteEstandar;
 import modelo.cliente.ClientePremium;
 import modelo.enums.TipoCliente;
-import modelo.enums.TipoEstado;
 import util.ConexionBD;
 
 import java.sql.*;
@@ -39,7 +38,7 @@ public class ClienteDAO implements IDao<Cliente> {
                             id, nombre, domicilio, nif, email, descuento, cuotaAnual);
                     return Optional.of(clientePremium);
                 }
-                if (tipoCliente == TipoCliente.ESTANDARD) {
+                if (tipoCliente == TipoCliente.ESTANDAR) {
                     // Creamos un cliente de tipo Estandar
                     ClienteEstandar clienteEstandar = new ClienteEstandar(
                             id, nombre, domicilio, nif, email);
@@ -78,7 +77,7 @@ public class ClienteDAO implements IDao<Cliente> {
                             id, nombre, domicilio, nif, email, descuento, cuotaAnual);
                     listaClientes.add(clientePremium);
                 }
-                if (tipoCliente == TipoCliente.ESTANDARD) {
+                if (tipoCliente == TipoCliente.ESTANDAR) {
                     // Creamos un cliente de tipo Estandar
                     ClienteEstandar clienteEstandar = new ClienteEstandar(
                             id, nombre, domicilio, nif, email);
