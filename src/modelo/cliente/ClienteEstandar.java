@@ -12,13 +12,13 @@ public class ClienteEstandar extends Cliente {
     // Constructor para la vista sin ID asignado
     public ClienteEstandar(String nombre, String domicilio, String nif, String email) {
         super(null, nombre, domicilio, nif, email);
-        this.tipoCliente = TipoCliente.ESTANDARD;
+        this.tipoCliente = TipoCliente.ESTANDAR;
     }
 
     // Constructor para la gestíon con ID de la BBDD
     public ClienteEstandar(Integer id, String nombre, String domicilio, String nif, String email) {
         super(id, nombre, domicilio, nif, email);
-        this.tipoCliente = TipoCliente.ESTANDARD;
+        this.tipoCliente = TipoCliente.ESTANDAR;
     }
 
     public TipoCliente getTipoCliente() {

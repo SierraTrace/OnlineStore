@@ -4,5 +4,5 @@
 package modelo.enums;
 
 public enum TipoCliente {
-    PREMIUM, ESTANDARD;
+    PREMIUM, ESTANDAR;
 }
